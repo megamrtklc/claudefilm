@@ -10,152 +10,253 @@
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14181c;--sf:#1c2228;--tx:#eee9df;--mu:#9aa3ab;--ac:#ff8a3d;--gr:#4ade80;--bd:#2a323a;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#14181c;--sf:#1c2228;--tx:#eee9df;--mu:#9aa3ab;--ac:#ff8a3d;--gr:#4ade80;--bd:#2a323a;color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-h1,h2,.logo{font-family:Georgia,"Times New Roman",serif}
-.shell{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
-aside{position:sticky;top:0;height:100vh;padding:22px 14px;border-right:1px solid var(--bd);display:flex;flex-direction:column;gap:6px}
-.logo{font-size:26px;font-weight:700;color:var(--ac);padding:0 10px 14px}
-.nv{display:flex;gap:10px;align-items:center;width:100%;text-align:left;border:0;border-radius:10px;padding:10px 12px;background:none;color:var(--mu);font:inherit;cursor:pointer}
-.nv:hover{background:var(--sf);color:var(--tx)}
-.nv.on{background:var(--sf);color:var(--ac);font-weight:600;box-shadow:inset 3px 0 var(--ac)}
-.col{min-width:0}
-.top{position:sticky;top:0;z-index:5;display:flex;gap:10px;padding:14px 24px;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif}
 button,select,input,textarea{font:inherit;color:var(--tx);background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:7px 14px}
-button{cursor:pointer}
-button.on{background:var(--ac);border-color:var(--ac);color:#fff}
-.top input{flex:1}
-main{padding:22px 24px;min-height:70vh}
-.hero{border-radius:16px;min-height:360px;padding:34px 28px;color:#fff;background:#222 center/cover;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;margin-bottom:8px;transition:background-image .6s}
-.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#000e,#0002)}
-.hero>*{position:relative;max-width:540px}.hero h1{margin:4px 0;font-size:clamp(28px,4vw,42px)}
-.hero p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.dots{display:flex;gap:6px;margin-top:12px}.dot{width:10px;height:10px;padding:0;border:0;border-radius:50%;background:#fff6}.dot.on{background:#fff;width:26px;border-radius:6px}
-.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
-.box{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:14px}.box b{display:block;font-size:28px;font-family:Georgia,serif;color:var(--ac)}
-.sec{margin:26px 0 10px;font-size:20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
-.rail{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x proximity}.rail .card{flex:0 0 140px;scroll-snap-align:start}
-.card{position:relative;padding:0;overflow:hidden;border-radius:8px;border:1px solid var(--bd);transition:transform .2s,box-shadow .2s;text-align:left}
-.card:hover{transform:translateY(-4px);box-shadow:0 12px 26px #0006;border-color:var(--ac)}
+button{cursor:pointer}button.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}.pg{padding-top:26px}
+.meta{color:var(--mu);font-size:14px}a{color:var(--ac)}
+/* header */
+.hd{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd)}
+.hw{max-width:1240px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.logo{font:700 26px Georgia,serif;color:var(--ac);letter-spacing:.06em;background:none;border:0;padding:0}
+#nv{display:flex;gap:2px;flex:1;flex-wrap:wrap}
+.nv{background:none;border:0;border-radius:0;color:var(--mu);padding:8px 12px}.nv:hover{color:var(--tx)}.nv.on{background:none;color:var(--ac);font-weight:600;box-shadow:inset 0 -2px var(--ac)}
+.hs{display:flex;gap:8px}.hs input{width:230px;border-radius:999px}
+/* manşet */
+.mh{position:relative;height:min(80vh,640px);min-height:500px;overflow:hidden;background:#111;color:#fff}
+.sl{position:absolute;inset:0;background:center/cover;opacity:0;transform:scale(1.1);transition:opacity 1s ease,transform 7s ease;display:flex;align-items:flex-end}
+.sl.on{opacity:1;transform:scale(1);z-index:1}
+.sl::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#000d 25%,#0002 75%),linear-gradient(0deg,var(--bg) 0,#0000 28%)}
+.sc{position:relative;width:100%;max-width:1240px;margin:0 auto;padding:0 24px 96px}
+.st{max-width:540px;opacity:0;transform:translateY(26px);transition:opacity .8s .35s,transform .8s .35s}.sl.on .st{opacity:1;transform:none}
+.st h1{font-size:clamp(30px,5vw,52px);margin:6px 0;line-height:1.1}
+.st p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin:8px 0}
+.ar{position:absolute;top:50%;z-index:3;width:46px;height:46px;padding:0;border-radius:50%;background:#0008;color:#fff;border:1px solid #fff4;font-size:28px;line-height:1;transform:translateY(-50%)}
+.ar:hover{background:var(--ac)}.ar.l{left:14px}.ar.r{right:14px}
+.pst{position:absolute;right:max(24px,calc((100vw - 1240px)/2 + 24px));bottom:28px;z-index:3;display:flex;gap:10px;align-items:flex-end}
+.pt{width:62px;padding:0;border:2px solid transparent;border-radius:8px;overflow:hidden;opacity:.55;transform:scale(.9);transition:.35s;background:#000}
+.pt img{width:100%;display:block;aspect-ratio:2/3;object-fit:cover}
+.pt.on{opacity:1;transform:scale(1.18) translateY(-6px);border-color:var(--ac);box-shadow:0 8px 20px #000a}
+/* kartlar */
+.rh{display:flex;justify-content:space-between;align-items:baseline;margin:30px 0 10px}.rh h2{margin:0;font-size:22px}
+.lk{background:none;border:0;color:var(--ac);padding:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.rail{display:flex;gap:14px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x proximity}.rail .card{flex:0 0 150px;scroll-snap-align:start}
+.card{position:relative;padding:0;overflow:hidden;border-radius:10px;border:1px solid var(--bd);transition:transform .25s,box-shadow .25s;text-align:left}
+.card:hover{transform:translateY(-5px);box-shadow:0 14px 28px #0006;border-color:var(--ac)}
 .card img,.ph{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:var(--bd)}
 .ph{display:flex;align-items:center;justify-content:center;padding:8px;text-align:center;color:var(--mu)}
-.ov{position:absolute;inset:auto 0 0;padding:26px 8px 8px;background:linear-gradient(transparent,#000d);color:#fff;font-size:13px;opacity:0;transition:opacity .2s}
-.card:hover .ov,.card:focus-visible .ov{opacity:1}
+.ov{position:absolute;inset:auto 0 0;padding:28px 8px 8px;background:linear-gradient(transparent,#000d);color:#fff;font-size:13px;opacity:0;transition:opacity .2s}.card:hover .ov{opacity:1}
 .bd{position:absolute;top:6px;right:6px;background:#000b;color:#fff;font-size:12px;padding:1px 7px;border-radius:999px}
 .my{color:var(--gr);font-size:12px;padding:3px 6px;letter-spacing:1px}
+.h1t{font-size:30px;margin:0 0 16px}.sec{margin:26px 0 10px;font-size:20px}
 .tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.more{display:block;margin:22px auto}
+.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.box{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:14px}.box b{display:block;font:700 28px Georgia,serif;color:var(--ac)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .bar{height:10px;border-radius:5px;background:var(--ac);margin:3px 0 10px}
-.dia{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd);font-size:14px}.dia span:first-child{color:var(--mu);min-width:80px}
-.sk{height:360px;border-radius:16px;background:linear-gradient(90deg,var(--sf),var(--bd),var(--sf));background-size:200% 100%;animation:sh 1.2s infinite}@keyframes sh{to{background-position:-200% 0}}
-dialog{border:1px solid var(--bd);border-radius:16px;background:var(--sf);color:var(--tx);max-width:660px;width:calc(100% - 24px);padding:20px;max-height:92vh}
-dialog::backdrop{background:#000a}
-.ban{height:190px;margin:-20px -20px 14px;background:center/cover;border-radius:16px 16px 0 0}
-.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
-.star{padding:2px 6px;font-size:22px;border:0;background:none;color:var(--mu)}.star.on{color:var(--gr);background:none}
-textarea{width:100%;margin-top:10px;border-radius:10px;resize:vertical}
-input[type=number]{width:72px}
-iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;margin-top:12px}
+.dia{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd);font-size:14px}.dia span:first-child{color:var(--mu);min-width:84px}
+.sk{height:480px;background:linear-gradient(90deg,var(--sf),var(--bd),var(--sf));background-size:200% 100%;animation:sh 1.2s infinite}@keyframes sh{to{background-position:-200% 0}}
 .note{background:var(--sf);border:1px solid var(--ac);border-radius:14px;padding:18px}
-.more{display:block;margin:20px auto}
-.meta{color:var(--mu);font-size:14px}a{color:var(--ac)}
-footer{padding:10px 24px 30px;color:var(--mu);font-size:13px}
-@media(max-width:820px){.shell{grid-template-columns:1fr}aside{position:fixed;inset:auto 0 0;height:auto;flex-direction:row;padding:6px;z-index:9;background:var(--bg);border:0;border-top:1px solid var(--bd);justify-content:space-around}.logo{display:none}.nv{flex-direction:column;gap:0;font-size:11px;text-align:center;padding:6px;width:auto}.nv.on{box-shadow:none}.two{grid-template-columns:1fr}main{padding:16px 14px 80px}.top{padding:10px 14px}footer{padding-bottom:80px}}
+/* detay */
+.dh{background:#222 center/cover;position:relative;color:#fff}
+.dh::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#000e 30%,#0007),linear-gradient(0deg,var(--bg) 0,#0000 22%)}
+.dhin{position:relative;display:flex;gap:28px;padding-top:36px;padding-bottom:40px;align-items:flex-end}
+.dp{width:190px;border-radius:12px;box-shadow:0 10px 30px #000a;flex:none}
+.di h1{margin:6px 0;font-size:clamp(28px,4vw,42px);line-height:1.1}.di h1 span{font-weight:400;opacity:.8}
+.bk{background:#0006;color:#fff;border-color:#fff3}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.chip{font-size:13px;padding:3px 11px;border-radius:999px;border:1px solid #fff5;background:#0004}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--bd);margin:0 0 24px;overflow-x:auto}
+.tb{border:0;border-radius:0;background:none;color:var(--mu);padding:12px 16px;white-space:nowrap}.tb.on{background:none;color:var(--ac);font-weight:600;box-shadow:inset 0 -2px var(--ac)}
+.tp{display:none}.tp.on{display:block}
+.g2{display:grid;grid-template-columns:1fr 340px;gap:28px}
+.card2{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:16px;align-self:start}.card2 h3{margin:0 0 6px}
+.kd{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px 28px;margin:0}.kd div{border-bottom:1px solid var(--bd);padding-bottom:8px}.kd dt{color:var(--mu);font-size:13px}.kd dd{margin:2px 0 0}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:14px}.pc img,.pc .ph{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:10px;display:block}.pc b{display:block;font-size:14px;margin-top:6px}.pc span{font-size:12px}
+iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:14px;background:#000}
+.vt{flex:0 0 180px;padding:0;overflow:hidden;text-align:left;font-size:12px}.vt img{width:100%;display:block}.vt span{display:block;padding:4px 8px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.star{padding:2px 6px;font-size:24px;border:0;background:none;color:var(--mu)}.star.on{color:var(--gr);background:none}
+textarea{width:100%;margin-top:10px;resize:vertical}input[type=number]{width:72px}
+/* footer */
+.ft{border-top:1px solid var(--bd);margin-top:44px;background:var(--sf)}
+.fw{max-width:1240px;margin:0 auto;padding:34px 24px;display:grid;grid-template-columns:2fr 1fr 2fr;gap:30px}
+.ft h4{margin:0 0 10px;font-family:Georgia,serif}.ft p{color:var(--mu);font-size:14px;margin:6px 0}
+.fl{display:block;background:none;border:0;padding:3px 0;color:var(--mu);text-align:left}.fl:hover{color:var(--ac)}
+.fb{border-top:1px solid var(--bd);text-align:center;padding:14px;color:var(--mu);font-size:13px}
+@media(max-width:820px){.hs{width:100%}.hs input{flex:1;width:auto}.two,.g2,.fw{grid-template-columns:1fr}.dhin{flex-direction:column;align-items:flex-start}.dp{width:120px}
+.pst{right:50%;transform:translateX(50%);bottom:18px}.pt{width:44px}.sc{padding-bottom:104px}.ar{width:38px;height:38px;font-size:22px}.wrap,.hw,.fw{padding-left:14px;padding-right:14px}}
+/* oynatıcı */
+.pl{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000 center/cover;color:#fff}
+.pl::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#000f 8%,#0004 55%,#0008)}.pl.playing::before{display:none}
+.pl iframe{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;border-radius:0}
+.pb{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);width:92px;height:92px;border-radius:50%;padding:0;border:0;background:var(--ac);color:#fff;display:grid;place-items:center;box-shadow:0 10px 40px #000a;transition:transform .2s}
+.pb svg{margin-left:4px}.pb:hover{transform:translate(-50%,-50%) scale(1.08)}
+.pb::after{content:"";position:absolute;inset:-10px;border-radius:50%;border:2px solid var(--ac);animation:pu 1.8s infinite}@keyframes pu{to{transform:scale(1.4);opacity:0}}
+.pv{position:absolute;left:22px;right:22px;bottom:20px;display:flex;gap:16px;align-items:flex-end}
+.pv img{width:100px;border-radius:8px;box-shadow:0 6px 20px #000a;flex:none}
+.pv b{font:700 22px Georgia,serif;display:block}.pv p{margin:4px 0 0;font-size:14px;opacity:.92;max-width:640px}
+.rt{display:inline-block;margin:4px 0;font-weight:700;color:#facc15}.rt small{color:#fff9;font-weight:400}.im{background:#f5c518;color:#000;padding:0 6px;border-radius:4px;margin-right:2px}
+.pn{position:absolute;top:42%;left:0;right:0;text-align:center}
+/* ana sayfa bölümleri */
+.tk{flex:0 0 210px;position:relative;display:flex;justify-content:flex-end;align-items:flex-end;height:225px;padding:0;border:0;background:none;scroll-snap-align:start}
+.rk{position:absolute;left:-2px;bottom:-14px;font:800 170px/1 Georgia,serif;color:transparent;-webkit-text-stroke:3px var(--ac);letter-spacing:-8px;pointer-events:none}
+.tk img{position:relative;width:140px;height:210px;object-fit:cover;border-radius:10px;box-shadow:0 8px 20px #0006;transition:transform .25s}.tk:hover img{transform:translateY(-6px)}
+.wd{flex:0 0 300px;height:170px;position:relative;border:0;border-radius:14px;padding:0;overflow:hidden;background:#222 center/cover;color:#fff;text-align:left;transition:transform .25s;scroll-snap-align:start}
+.wd::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#000e,#0001 70%)}.wd:hover{transform:scale(1.03)}
+.wd span{position:absolute;left:12px;right:12px;bottom:10px}.wd b{display:block}.wd small{opacity:.85}
+.wd .tg{top:10px;bottom:auto;right:auto;font-size:11px;background:var(--ac);padding:1px 8px;border-radius:999px;width:fit-content}
+.sp{display:grid;grid-template-columns:1.1fr 1fr;gap:16px}
+.fe{position:relative;min-height:340px;border:0;border-radius:16px;overflow:hidden;background:#222 center/cover;color:#fff;text-align:left;padding:0}
+.fe::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#000f,#0003 80%)}
+.fe span{position:absolute;left:20px;right:20px;bottom:18px}.fe b{display:block;font:700 28px Georgia,serif;margin:4px 0}
+.fe em{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-style:normal;opacity:.9}
+.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ls{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lr{display:flex;gap:12px;align-items:center;text-align:left;padding:10px;border-radius:12px}.lr:hover{border-color:var(--ac)}
+.lr img{width:56px;aspect-ratio:2/3;object-fit:cover;border-radius:6px;flex:none}
+.ln{font:700 26px Georgia,serif;color:var(--ac);min-width:30px;text-align:center}
+.lt{min-width:0}.lt b,.lt small{display:block}.lt em{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-style:normal;color:var(--mu);font-size:13px}
+@media(max-width:820px){.sp,.ls{grid-template-columns:1fr}.fe{min-height:260px}.pv img{width:60px}.pv p{display:none}.pb{width:70px;height:70px}}
 </style>
 </head>
 <body>
-<div class="shell">
-<aside id="side"></aside>
-<div class="col">
-<div class="top"><input id="q" type="search" placeholder="Film veya dizi ara…" aria-label="Ara"><button id="th" aria-label="Tema değiştir">◐</button></div>
+<header class="hd"><div class="hw"><button class="logo" data-v="home">SİNEMO</button><nav id="nv"></nav><div class="hs"><input id="q" type="search" placeholder="Film veya dizi ara…" aria-label="Ara"><button id="th" aria-label="Tema değiştir">◐</button></div></div></header>
 <main id="app"></main>
-<footer>Bu ürün TMDB API’sini kullanır, ancak TMDB tarafından onaylanmamış veya sertifikalandırılmamıştır. Yayın platformu bilgileri JustWatch tarafından sağlanır.</footer>
-</div>
-</div>
-<dialog id="dlg"></dialog>
+<footer class="ft"><div class="fw">
+<div><div class="logo" style="font-size:22px">SİNEMO</div><p>Film ve dizileri keşfet, fragmanları izle, listeni ve izleme günlüğünü tek yerde tut.</p></div>
+<div><h4>Sayfalar</h4><button class="fl" data-v="filmler">Filmler</button><button class="fl" data-v="diziler">Diziler</button><button class="fl" data-v="liste">Listem</button><button class="fl" data-v="gunluk">Günlük</button></div>
+<div><h4>Veri kaynakları</h4><p>Bu ürün TMDB API’sini kullanır, ancak TMDB tarafından onaylanmamış veya sertifikalandırılmamıştır.</p><p>Yayın platformu bilgileri JustWatch tarafından sağlanır.</p></div>
+</div><div class="fb">© 2026 Sinemo · Listelerin yalnızca bu tarayıcıda saklanır.</div></footer>
 <script>
 /* KURULUM: themoviedb.org > Ayarlar > API bölümündeki "API Key (v3)" değerini buraya yapıştır. */
 var KEY="3108265ab3fdbf3af14175edf64a9c7f";
-const API="https://api.themoviedb.org/3",IMG="https://image.tmdb.org/t/p/",REGION="TR",ST=["İzlenecek","İzleniyor","İzlendi"];
-const S={view:"home",type:"movie",cat:"trending",genre:"",q:"",page:1,total:1,items:[],genres:{movie:[],tv:[]},rows:null,hero:[],hi:0};
+var OMDB=""; /* İsteğe bağlı: omdbapi.com'dan ücretsiz anahtar alırsan oynatıcıda gerçek IMDb puanı görünür. */
+const API="https://api.themoviedb.org/3",IMG="https://image.tmdb.org/t/p/",REGION="TR",ST=["İzlenecek","İzleniyor","İzlendi"],TITLE="Sinemo – Film ve Dizi Günlüğün";
+const VW={home:"home",filmler:"kesfet",diziler:"kesfet",liste:"liste",gunluk:"istatistik"};
+const S={view:"home",key:"home",type:"movie",cat:"trending",genre:"",q:"",page:1,total:1,items:[],genres:{movie:[],tv:[]},rows:null,hero:[],hi:0,cur:null,gn:[],sim:[]};
 let L={},busy=false,timer;
 try{L=JSON.parse(localStorage.getItem("sinemo")||"{}")}catch(e){}
 const save=()=>{try{localStorage.setItem("sinemo",JSON.stringify(L))}catch(e){}};
-const $=s=>document.querySelector(s),vals=()=>Object.keys(L).map(k=>L[k]);
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s),vals=()=>Object.keys(L).map(k=>L[k]),W=h=>`<div class="wrap pg">${h}</div>`;
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const stars=n=>"★".repeat(n)+"☆".repeat(5-n),today=()=>new Date().toISOString().slice(0,10);
 function api(p,o){const u=new URL(API+p);u.searchParams.set("api_key",KEY);u.searchParams.set("language","tr-TR");for(const k in o||{})u.searchParams.set(k,o[k]);return fetch(u).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()})}
 const norm=(r,t)=>({id:r.id,type:r.media_type||t,title:r.title||r.name||"",poster:r.poster_path,back:r.backdrop_path,rating:r.vote_average||0,year:(r.release_date||r.first_air_date||"").slice(0,4),overview:r.overview||""});
 function card(it,i,src){const c=L[it.type+it.id],ph=it.poster?`<img loading="lazy" alt="${esc(it.title)} afişi" src="${IMG}w342${it.poster}">`:`<div class="ph">${esc(it.title)}</div>`;
 return `<button class="card" data-${src}="${i}">${ph}${it.rating?`<span class="bd">★ ${it.rating.toFixed(1)}</span>`:""}<div class="ov"><b>${esc(it.title)}</b><br>${it.type=="tv"?"Dizi":"Film"}${it.year?" · "+it.year:""}${c?"<br>● "+c.status:""}</div>${c&&c.my?`<div class="my">${stars(c.my)}</div>`:""}</button>`}
-function nav(){$("#side").innerHTML='<div class="logo">Sinemo</div>'+[["home","Ana Sayfa","⌂"],["kesfet","Keşfet","◎"],["liste","Listem","≡"],["istatistik","Günlük","▤"]].map(t=>`<button class="nv ${S.view==t[0]?"on":""}" data-v="${t[0]}"><span>${t[2]}</span>${t[1]}</button>`).join("")}
-function setup(){$("#app").innerHTML='<div class="note"><h2>Kurulum gerekli</h2><p>Bu site film ve dizi verilerini TMDB’den çeker. <code>index.html</code> dosyasının başındaki <code>KEY</code> değişkenine ücretsiz API anahtarını yapıştır:</p><ol><li><a href="https://www.themoviedb.org/signup">themoviedb.org</a> hesabı aç</li><li>Ayarlar → API bölümünden “API Key (v3)” değerini al</li><li>Dosyayı kaydet ve GitHub’a yükle</li></ol></div>'}
+function nav(){const a=S.view=="kesfet"?(S.type=="tv"?"diziler":"filmler"):{home:"home",liste:"liste",istatistik:"gunluk"}[S.view]||"";
+$("#nv").innerHTML=[["home","Ana Sayfa"],["filmler","Filmler"],["diziler","Diziler"],["liste","Listem"],["gunluk","Günlük"]].map(t=>`<button class="nv${a==t[0]?" on":""}" data-v="${t[0]}">${t[1]}</button>`).join("")}
+function setup(){$("#app").innerHTML=W('<div class="note"><h2>Kurulum gerekli</h2><p>Bu site film ve dizi verilerini TMDB’den çeker. <code>index.html</code> dosyasının başındaki <code>KEY</code> değişkenine ücretsiz API anahtarını yapıştır:</p><ol><li><a href="https://www.themoviedb.org/signup">themoviedb.org</a> hesabı aç</li><li>Ayarlar → API bölümünden “API Key (v3)” değerini al</li><li>Dosyayı kaydet ve GitHub’a yükle</li></ol></div>')}
 function load(reset){if(busy)return;busy=true;if(reset){S.page=1;S.items=[]}
 const t=S.type,o={page:S.page};let p;
-if(S.q){p="/search/"+t;o.query=S.q}
+if(S.q){p="/search/multi";o.query=S.q}
 else if(S.genre){p="/discover/"+t;o.with_genres=S.genre;o.sort_by=S.cat=="top"?"vote_average.desc":"popularity.desc";if(S.cat=="top")o["vote_count.gte"]=500}
 else p=S.cat=="trending"?`/trending/${t}/week`:`/${t}/`+(S.cat=="top"?"top_rated":"popular");
-api(p,o).then(d=>{S.total=d.total_pages;S.items=S.items.concat(d.results.map(r=>norm(r,t)));busy=false;draw()}).catch(()=>{busy=false;$("#app").innerHTML='<div class="note">Veriler alınamadı. API anahtarını ve internet bağlantını kontrol et.</div>'})}
+api(p,o).then(d=>{S.total=d.total_pages;S.items=S.items.concat(d.results.filter(r=>!S.q||r.media_type=="movie"||r.media_type=="tv").map(r=>norm(r,t)));busy=false;draw()}).catch(()=>{busy=false;$("#app").innerHTML=W('<div class="note">Veriler alınamadı. API anahtarını ve internet bağlantını kontrol et.</div>')})}
 function loadHome(){Promise.all([api("/trending/all/week"),api("/trending/movie/week"),api("/trending/tv/week"),api("/movie/top_rated"),api("/tv/popular")]).then(r=>{
 const n=(d,t)=>d.results.map(x=>norm(x,t));
-S.rows=[["Bu hafta herkes bunu izliyor",n(r[1],"movie")],["Haftanın dizileri",n(r[2],"tv")],["En yüksek puanlı filmler",n(r[3],"movie")],["Popüler diziler",n(r[4],"tv")]];
-S.hero=n(r[0]).filter(x=>x.back).slice(0,5);draw()}).catch(()=>{})}
-function heroIn(){const h=S.hero[S.hi];return `<small>HAFTANIN ÖNE ÇIKANI · ${h.type=="tv"?"DİZİ":"FİLM"}</small><h1>${esc(h.title)}</h1><p>${esc(h.overview)}</p><div class="row"><button class="on" data-hh="1">▶ Detay &amp; Fragman</button><span>★ ${h.rating.toFixed(1)}${h.year?" · "+h.year:""}</span></div><div class="dots">${S.hero.map((_,i)=>`<button class="dot${i==S.hi?" on":""}" data-hd="${i}" aria-label="Slayt ${i+1}"></button>`).join("")}</div>`}
-function setHero(){const e=$("#hero");if(e&&S.hero.length){e.style.backgroundImage=`url(${IMG}w1280${S.hero[S.hi].back})`;e.innerHTML=heroIn()}}
+S.rows=[["Bu hafta herkes bunu izliyor",n(r[1],"movie"),"filmler"],["Haftanın dizileri",n(r[2],"tv"),"diziler"],["En yüksek puanlı filmler",n(r[3],"movie"),"filmler"],["Popüler diziler",n(r[4],"tv"),"diziler"]];
+S.hero=n(r[0]).filter(x=>x.back&&x.poster).slice(0,7);draw()}).catch(()=>{$("#app").innerHTML=W('<div class="note">Veriler alınamadı. API anahtarını ve internet bağlantını kontrol et.</div>')})}
+function slide(n){const k=S.hero.length;if(!k)return;S.hi=(n+k)%k;$$(".sl").forEach((e,i)=>e.classList.toggle("on",i==S.hi));$$(".pt").forEach((e,i)=>e.classList.toggle("on",i==S.hi))}
 function drawHome(){if(!S.rows){$("#app").innerHTML='<div class="sk"></div>';return}
-const a=vals(),w=a.filter(x=>x.status=="İzlendi"),r=w.filter(x=>x.my),avg=r.length?(r.reduce((s,x)=>s+x.my,0)/r.length).toFixed(1):"–";
-let h=`<div class="stat"><div class="box"><b>${a.length}</b>Listede</div><div class="box"><b>${a.filter(x=>x.status=="İzleniyor").length}</b>İzleniyor</div><div class="box"><b>${w.length}</b>İzlendi</div><div class="box"><b>${avg}</b>Ortalama puanın</div></div><div class="hero" id="hero"></div>`;
-const c=a.filter(x=>x.status=="İzleniyor");
-if(c.length)h+=`<h2 class="sec">İzlemeye devam et</h2><div class="rail">${c.map(x=>card(x,x.type+x.id,"l")).join("")}</div>`;
-S.rows.forEach((r,ri)=>{h+=`<h2 class="sec">${r[0]}</h2><div class="rail">${r[1].map((x,i)=>card(x,ri+"-"+i,"r")).join("")}</div>`});
-$("#app").innerHTML=h;setHero()}
+const c=vals().filter(x=>x.status=="İzleniyor");
+let h=`<section class="mh" aria-label="Manşet">${S.hero.map((x,i)=>`<div class="sl${i==S.hi?" on":""}" style="background-image:url(${IMG}w1280${x.back})"><div class="sc"><div class="st"><small>${x.type=="tv"?"DİZİ":"FİLM"} · HAFTANIN ÖNE ÇIKANI</small><h1>${esc(x.title)}</h1><div>★ ${x.rating.toFixed(1)}${x.year?" · "+x.year:""}</div><p>${esc(x.overview)}</p><div class="row"><button class="on" data-hh="${i}">▶ Detay ve Fragman</button></div></div></div></div>`).join("")}<button class="ar l" data-ar="-1" aria-label="Önceki">‹</button><button class="ar r" data-ar="1" aria-label="Sonraki">›</button><div class="pst">${S.hero.map((x,i)=>`<button class="pt${i==S.hi?" on":""}" data-hd="${i}" aria-label="${esc(x.title)}"><img alt="" src="${IMG}w185${x.poster}"></button>`).join("")}</div></section><div class="wrap">`;
+const rh=(t,l)=>`<div class="rh"><h2>${t}</h2>${l?`<button class="lk" data-v="${l}">Tümünü gör →</button>`:""}</div>`,bk=x=>x.back?IMG+"w780"+x.back:(x.poster?IMG+"w342"+x.poster:"");
+if(c.length)h+=rh("İzlemeye devam et")+`<div class="rail">${c.map(x=>`<button class="wd" data-l="${x.type+x.id}" style="background-image:url(${bk(x)})"><span><b>${esc(x.title)}</b><small>${x.type=="tv"?"Sezon "+(x.s||1)+" · Bölüm "+(x.e||0):"Devam ediyor"}</small></span></button>`).join("")}</div>`;
+const R=S.rows;
+h+=rh(R[0][0],R[0][2])+`<div class="rail">${R[0][1].slice(0,10).map((x,i)=>`<button class="tk" data-r="0-${i}" aria-label="${esc(x.title)}"><span class="rk">${i+1}</span>${x.poster?`<img loading="lazy" alt="${esc(x.title)} afişi" src="${IMG}w342${x.poster}">`:""}</button>`).join("")}</div>`;
+h+=rh(R[1][0],R[1][2])+`<div class="rail">${R[1][1].map((x,i)=>`<button class="wd" data-r="1-${i}" style="background-image:url(${bk(x)})"><span class="tg">${x.type=="tv"?"DİZİ":"FİLM"}</span><span><b>${esc(x.title)}</b><small>★ ${x.rating.toFixed(1)}${x.year?" · "+x.year:""}</small></span></button>`).join("")}</div>`;
+const f=R[2][1][0];
+if(f)h+=rh(R[2][0],R[2][2])+`<div class="sp"><button class="fe" data-r="2-0" style="background-image:url(${bk(f)})"><span><small>EN YÜKSEK PUANLI · ★ ${f.rating.toFixed(1)}</small><b>${esc(f.title)}</b><em>${esc(f.overview)}</em></span></button><div class="mini">${R[2][1].slice(1,7).map((x,i)=>card(x,"2-"+(i+1),"r")).join("")}</div></div>`;
+h+=rh(R[3][0],R[3][2])+`<div class="ls">${R[3][1].slice(0,8).map((x,i)=>`<button class="lr" data-r="3-${i}"><span class="ln">${i+1}</span>${x.poster?`<img loading="lazy" alt="" src="${IMG}w185${x.poster}">`:"<span></span>"}<span class="lt"><b>${esc(x.title)}</b><small>★ ${x.rating.toFixed(1)}${x.year?" · "+x.year:""}</small><em>${esc(x.overview||"")}</em></span></button>`).join("")}</div>`;
+$("#app").innerHTML=h+"</div>"}
 function draw(){nav();
+if(S.view=="detay")return;
 if(S.view=="home")return drawHome();
 if(S.view=="kesfet"){const gs=S.genres[S.type];
-$("#app").innerHTML=`<div class="tools"><button data-t="movie" class="${S.type=="movie"?"on":""}">Filmler</button><button data-t="tv" class="${S.type=="tv"?"on":""}">Diziler</button><select id="cat" aria-label="Kategori">${[["trending","Haftanın trendleri"],["popular","Popüler"],["top","En yüksek puanlı"]].map(c=>`<option value="${c[0]}"${S.cat==c[0]?" selected":""}>${c[1]}</option>`).join("")}</select><select id="gn" aria-label="Tür"><option value="">Tüm türler</option>${gs.map(g=>`<option value="${g.id}"${S.genre==g.id?" selected":""}>${esc(g.name)}</option>`).join("")}</select>${S.q?`<span class="meta">“${esc(S.q)}” sonuçları</span>`:""}</div><div class="grid">${S.items.map((it,i)=>card(it,i,"i")).join("")||"Sonuç bulunamadı."}</div>${S.page<S.total?'<button class="more" data-more="1">Daha fazla göster</button>':""}`;
+$("#app").innerHTML=W(`<h1 class="h1t">${S.q?`“${esc(S.q)}” için sonuçlar`:S.type=="tv"?"Diziler":"Filmler"}</h1><div class="tools"><select id="cat" aria-label="Kategori">${[["trending","Haftanın trendleri"],["popular","Popüler"],["top","En yüksek puanlı"]].map(c=>`<option value="${c[0]}"${S.cat==c[0]?" selected":""}>${c[1]}</option>`).join("")}</select><select id="gn" aria-label="Tür"><option value="">Tüm türler</option>${gs.map(g=>`<option value="${g.id}"${S.genre==g.id?" selected":""}>${esc(g.name)}</option>`).join("")}</select></div><div class="grid">${S.items.map((it,i)=>card(it,i,"i")).join("")||"Sonuç bulunamadı."}</div>${S.page<S.total?'<button class="more" data-more="1">Daha fazla göster</button>':""}`);
 }else if(S.view=="liste"){const a=vals();
-$("#app").innerHTML=ST.map(s=>{const r=a.filter(x=>x.status==s);return `<h2 class="sec">${s} (${r.length})</h2><div class="grid">${r.map(x=>card(x,x.type+x.id,"l")).join("")||'<span class="meta">Henüz yok.</span>'}</div>`}).join("");
+$("#app").innerHTML=W('<h1 class="h1t">Listem</h1>'+ST.map(s=>{const r=a.filter(x=>x.status==s);return `<h2 class="sec">${s} (${r.length})</h2><div class="grid">${r.map(x=>card(x,x.type+x.id,"l")).join("")||'<span class="meta">Henüz yok.</span>'}</div>`}).join(""));
 }else{const a=vals(),w=a.filter(x=>x.status=="İzlendi"),yr=String(new Date().getFullYear()),wy=w.filter(x=>(x.date||"").slice(0,4)==yr),r=w.filter(x=>x.my),gc={},dist=[0,0,0,0,0,0];
 a.forEach(x=>(x.genres||[]).forEach(g=>gc[g]=(gc[g]||0)+1));r.forEach(x=>dist[x.my]++);
 const top=Object.keys(gc).sort((x,y)=>gc[y]-gc[x]).slice(0,6),avg=r.length?(r.reduce((s,x)=>s+x.my,0)/r.length).toFixed(1):"–",di=w.filter(x=>x.date).sort((x,y)=>y.date.localeCompare(x.date)).slice(0,12);
-$("#app").innerHTML=`<h2 class="sec" style="margin-top:0">${yr} özetin</h2><div class="stat"><div class="box"><b>${wy.length}</b>Bu yıl izlenen</div><div class="box"><b>${wy.filter(x=>x.type=="movie").length}</b>Film</div><div class="box"><b>${wy.filter(x=>x.type=="tv").length}</b>Dizi</div><div class="box"><b>${avg}</b>Ortalama puanın</div></div>
-<div class="two"><div><h2 class="sec">Puan dağılımın</h2>${[5,4,3,2,1].map(n=>`<span class="my">${stars(n)}</span> ${dist[n]}<div class="bar" style="width:${Math.min(100,dist[n]*18)}%"></div>`).join("")}<h2 class="sec">En çok listelediğin türler</h2>${top.map(g=>`${esc(g)} (${gc[g]})<div class="bar" style="width:${Math.min(100,gc[g]*18)}%"></div>`).join("")||'<span class="meta">Listene yapım ekledikçe burada görünür.</span>'}</div>
-<div><h2 class="sec">Günlük</h2>${di.map(x=>`<div class="dia"><span>${x.date}</span><span><b>${esc(x.title)}</b> <span class="my">${x.my?stars(x.my):""}</span>${x.note?`<br><span class="meta">${esc(x.note)}</span>`:""}</span></div>`).join("")||'<span class="meta">“İzlendi” işaretlediğin yapımlar tarihiyle burada görünür.</span>'}</div></div>`}}
-function ent(){const d=$("#dlg"),it=d._it,k=it.type+it.id;return L[k]||(L[k]={id:it.id,type:it.type,title:it.title,poster:it.poster,back:it.back,rating:it.rating,year:it.year,overview:it.overview,genres:d._gn||[],status:"İzlenecek",s:1,e:0})}
-function ctl(){const it=$("#dlg")._it,c=L[it.type+it.id]||{};
-$("#ctl").innerHTML=`<div class="row">${ST.map(s=>`<button class="${c.status==s?"on":""}" data-s="${s}">${s}</button>`).join("")}</div><div class="row">Puanın: ${[1,2,3,4,5].map(n=>`<button class="star${(c.my||0)>=n?" on":""}" data-star="${n}" aria-label="${n} yıldız">★</button>`).join("")}</div>${it.type=="tv"&&c.status?`<div class="row">Sezon <input id="se" type="number" min="1" value="${c.s||1}"> Bölüm <input id="ep" type="number" min="0" value="${c.e||0}"></div>`:""}${c.status?`<textarea id="nt" rows="2" placeholder="Kısa not veya yorum…">${esc(c.note||"")}</textarea>`:""}<div class="row">${c.status?'<button data-s="">Listeden çıkar</button>':""}<button data-x="1">Kapat</button></div>`}
-function openIt(it){const d=$("#dlg");d._it=it;d._gn=null;d.innerHTML="Yükleniyor…";d.showModal();
-api(`/${it.type}/${it.id}`,{append_to_response:"videos,watch/providers,credits",include_video_language:"tr,en,null"}).then(x=>{
-const gn=(x.genres||[]).map(g=>g.name),v=((x.videos||{}).results||[]).filter(y=>y.site=="YouTube").sort((a,b)=>(b.type=="Trailer")-(a.type=="Trailer"))[0],
-pr=((x["watch/providers"]||{}).results||{})[REGION],fl=pr&&(pr.flatrate||[]).map(p=>p.provider_name),cs=((x.credits||{}).cast||[]).slice(0,8).map(c=>esc(c.name));
-d._gn=gn;const c=L[it.type+it.id];if(c&&!c.genres.length){c.genres=gn;save()}
-d.innerHTML=`${x.backdrop_path?`<div class="ban" style="background-image:url(${IMG}w780${x.backdrop_path})"></div>`:""}<h2 style="margin:0">${esc(it.title)}</h2><p class="meta" style="margin:4px 0">${it.type=="tv"?"Dizi":"Film"}${it.year?" · "+it.year:""} · ★ ${it.rating.toFixed(1)} · ${esc(gn.join(", "))}${x.runtime?" · "+x.runtime+" dk":""}${x.number_of_seasons?" · "+x.number_of_seasons+" sezon":""}</p><p>${esc(it.overview||"Türkçe özet bulunamadı.")}</p>${cs.length?`<p><b>Oyuncular:</b> ${cs.join(", ")}</p>`:""}<p><b>Nerede izlenir (TR):</b> ${fl&&fl.length?esc(fl.join(", ")):"Abonelikli platform bilgisi yok"}${pr&&pr.link?` · <a target="_blank" rel="noopener" href="${esc(pr.link)}">tüm seçenekler</a>`:""}</p>${v?`<iframe loading="lazy" allowfullscreen title="Fragman" src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(v.key)}"></iframe>`:""}<div id="ctl"></div>`;ctl()
-}).catch(()=>{d.innerHTML='Detaylar alınamadı. <button data-x="1">Kapat</button>'})}
-function go(v){S.view=v;if(location.hash.slice(1)!=v)location.hash=v;if(v=="kesfet"&&!S.items.length)load(true);else draw();scrollTo(0,0)}
+$("#app").innerHTML=W(`<h1 class="h1t">${yr} özetin</h1><div class="stat"><div class="box"><b>${a.length}</b>Listede</div><div class="box"><b>${wy.length}</b>Bu yıl izlenen</div><div class="box"><b>${wy.filter(x=>x.type=="movie").length} / ${wy.filter(x=>x.type=="tv").length}</b>Film / Dizi</div><div class="box"><b>${avg}</b>Ortalama puanın</div></div>
+<div class="two"><div><h2 class="sec" style="margin-top:0">Puan dağılımın</h2>${[5,4,3,2,1].map(n=>`<span class="my">${stars(n)}</span> ${dist[n]}<div class="bar" style="width:${Math.min(100,dist[n]*18)}%"></div>`).join("")}<h2 class="sec">En çok listelediğin türler</h2>${top.map(g=>`${esc(g)} (${gc[g]})<div class="bar" style="width:${Math.min(100,gc[g]*18)}%"></div>`).join("")||'<span class="meta">Listene yapım ekledikçe burada görünür.</span>'}</div>
+<div><h2 class="sec" style="margin-top:0">Günlük</h2>${di.map(x=>`<div class="dia"><span>${x.date}</span><span><b>${esc(x.title)}</b> <span class="my">${x.my?stars(x.my):""}</span>${x.note?`<br><span class="meta">${esc(x.note)}</span>`:""}</span></div>`).join("")||'<span class="meta">“İzlendi” işaretlediğin yapımlar tarihiyle burada görünür.</span>'}</div></div>`)}}
+/* detay */
+function ent(){const it=S.cur,k=it.type+it.id;return L[k]||(L[k]={id:it.id,type:it.type,title:it.title,poster:it.poster,back:it.back,rating:it.rating,year:it.year,overview:it.overview,genres:S.gn||[],status:"İzlenecek",s:1,e:0})}
+function ctl(){const it=S.cur,c=L[it.type+it.id]||{};
+$("#ctl").innerHTML=`<div class="row" style="margin-top:6px">${ST.map(s=>`<button class="${c.status==s?"on":""}" data-s="${s}">${s}</button>`).join("")}</div><div class="row">Puanın: ${[1,2,3,4,5].map(n=>`<button class="star${(c.my||0)>=n?" on":""}" data-star="${n}" aria-label="${n} yıldız">★</button>`).join("")}</div>${it.type=="tv"&&c.status?`<div class="row">Sezon <input id="se" type="number" min="1" value="${c.s||1}"> Bölüm <input id="ep" type="number" min="0" value="${c.e||0}"></div>`:""}${c.status?`<textarea id="nt" rows="2" placeholder="Kısa not veya yorum…">${esc(c.note||"")}</textarea><div class="row"><button data-s="">Listeden çıkar</button></div>`:""}`}
+const openIt=it=>{location.hash=(it.type=="tv"?"dizi/":"film/")+it.id};
+const dt=s=>s?new Date(s).toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric"}):"",usd=n=>n?"$"+n.toLocaleString("tr-TR"):"";
+const trow=(k,v)=>v?`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`:"";
+const crew=(x,j)=>[...new Set(((x.credits||{}).crew||[]).filter(c=>j.includes(c.job)).map(c=>c.name))].join(", "),names=a=>(a||[]).map(z=>z.name).join(", ");
+const stt={Released:"Yayınlandı",Ended:"Sona erdi","Returning Series":"Devam ediyor",Canceled:"İptal edildi","In Production":"Yapım aşamasında","Post Production":"Post prodüksiyon",Planned:"Planlandı",Rumored:"Söylenti"};
+const filmInfo=x=>trow("Orijinal ad",x.original_title)+trow("Yönetmen",crew(x,["Director"]))+trow("Senaryo",crew(x,["Screenplay","Writer","Story"]))+trow("Yapım şirketi",names(x.production_companies))+trow("Ülke",names(x.production_countries))+trow("Orijinal dil",((x.spoken_languages||[])[0]||{}).english_name||x.original_language)+trow("Süre",x.runtime?x.runtime+" dk":"")+trow("Vizyon tarihi",dt(x.release_date))+trow("Durum",stt[x.status]||x.status)+trow("Bütçe",usd(x.budget))+trow("Hasılat",usd(x.revenue));
+const diziInfo=x=>trow("Orijinal ad",x.original_name)+trow("Yaratıcı",names(x.created_by))+trow("Yayın kanalı",names(x.networks))+trow("Sezon / Bölüm",x.number_of_seasons?x.number_of_seasons+" sezon · "+x.number_of_episodes+" bölüm":"")+trow("İlk yayın",dt(x.first_air_date))+trow("Son yayın",dt(x.last_air_date))+trow("Sonraki bölüm",x.next_episode_to_air?dt(x.next_episode_to_air.air_date):"")+trow("Durum",stt[x.status]||x.status)+trow("Bölüm süresi",(x.episode_run_time||[])[0]?x.episode_run_time[0]+" dk":"")+trow("Ülke",(x.origin_country||[]).join(", "))+trow("Orijinal dil",x.original_language)+trow("Yapım şirketi",names(x.production_companies));
+function playV(k){const p=$("#pl");if(!p||!k)return;S.vk=k;p.classList.add("playing");p.innerHTML=`<iframe src="https://www.youtube.com/embed/${encodeURIComponent(k)}?autoplay=1&rel=0&playsinline=1" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" title="Video oynatıcı"></iframe>`;const a=$("#yl");if(a)a.href="https://www.youtube.com/watch?v="+encodeURIComponent(k)}
+function player(it,x,vs){const o=it.overview||"Türkçe özet bulunamadı.",syn=o.length>170?o.slice(0,167).replace(/\s+\S*$/,"")+"…":o;
+return `<div class="pl" id="pl" style="background-image:url(${x.backdrop_path?IMG+"w1280"+x.backdrop_path:""})"><div class="pv">${it.poster?`<img alt="${esc(it.title)} afişi" src="${IMG}w342${it.poster}">`:""}<div><b>${esc(it.title)}</b><span class="rt" id="rt">★ ${it.rating.toFixed(1)} <small>TMDB</small></span><p>${esc(syn)}</p></div></div>${vs.length?'<button class="pb" data-play="1" aria-label="Oynat"><svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></button>':'<div class="pn">Bu yapım için video bulunamadı.</div>'}</div>`}
+function tab(n){$$(".tp").forEach(e=>e.classList.toggle("on",e.id=="tp-"+n));$$(".tb").forEach(e=>e.classList.toggle("on",e.dataset.tab==n));const t=$(".tabs");if(t)t.scrollIntoView({behavior:"smooth",block:"start"})}
+function showDetail(t,id){S.view="detay";S.key="";nav();scrollTo(0,0);$("#app").innerHTML='<div class="sk"></div>';
+api(`/${t}/${id}`,{append_to_response:"videos,credits,similar,watch/providers,external_ids",include_video_language:"tr,en,null"}).then(x=>{
+if(S.view!="detay")return;
+const it=norm(x,t),tv=t=="tv",im=x.imdb_id||(x.external_ids||{}).imdb_id;S.cur=it;S.gn=(x.genres||[]).map(g=>g.name);
+const vs=((x.videos||{}).results||[]).filter(v=>v.site=="YouTube").sort((a,b)=>(b.type=="Trailer")-(a.type=="Trailer")),
+cast=((x.credits||{}).cast||[]).slice(0,24),pr=((x["watch/providers"]||{}).results||{})[REGION],fl=pr&&(pr.flatrate||[]).map(p=>p.provider_name),
+len=tv?((x.episode_run_time||[])[0]?x.episode_run_time[0]+" dk/bölüm":""):(x.runtime?x.runtime+" dk":"");
+S.sim=((x.similar||{}).results||[]).slice(0,18).map(r=>norm(r,t));document.title=it.title+" – Sinemo";
+const seasons=tv?(x.seasons||[]).filter(z=>z.season_number>0).map(z=>`<span class="chip" style="border-color:var(--bd);background:none">${esc(z.name)} · ${z.episode_count} bölüm</span>`).join(""):"";
+const tabs=[["genel","Genel Bakış"],["video","Fragman ve Videolar"],["oyuncu","Oyuncular"],["kunye","Künye"],["benzer","Benzer Yapımlar"]];
+$("#app").innerHTML=`<section class="dh" style="background-image:url(${x.backdrop_path?IMG+"w1280"+x.backdrop_path:""})"><div class="wrap dhin">${it.poster?`<img class="dp" alt="${esc(it.title)} afişi" src="${IMG}w342${it.poster}">`:""}<div class="di"><button class="bk" data-back="1">← Geri</button><div style="margin-top:12px;opacity:.85">${tv?"DİZİ":"FİLM"}</div><h1>${esc(it.title)}${it.year?` <span>(${it.year})</span>`:""}</h1>${x.tagline?`<p style="margin:4px 0"><i>${esc(x.tagline)}</i></p>`:""}<div class="chips"><span class="chip">★ ${it.rating.toFixed(1)}</span>${len?`<span class="chip">${esc(len)}</span>`:""}${S.gn.map(g=>`<span class="chip">${esc(g)}</span>`).join("")}</div>${vs.length?'<button class="on" data-tab="video">▶ Fragmanı izle</button>':""}</div></div></section>
+<div class="wrap" style="padding-top:8px"><div class="tabs">${tabs.map((z,i)=>`<button class="tb${i?"":" on"}" data-tab="${z[0]}">${z[1]}</button>`).join("")}</div>
+<div class="tp on" id="tp-genel"><div class="g2"><div><h2 class="sec" style="margin-top:0">Özet</h2><p>${esc(it.overview||"Türkçe özet bulunamadı.")}</p><h3>Nerede izlenir (Türkiye)</h3><p>${fl&&fl.length?esc(fl.join(", ")):"Abonelikli platform bilgisi yok."}${pr&&pr.link?` <a target="_blank" rel="noopener" href="${esc(pr.link)}">Tüm seçenekler</a>`:""}</p></div><div class="card2"><h3>Listem</h3><div id="ctl"></div></div></div></div>
+<div class="tp" id="tp-video">${player(it,x,vs)}${vs.length?`<p class="meta" style="margin:10px 0">Video açılmazsa <a id="yl" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=${encodeURIComponent(vs[0].key)}">YouTube’da izle</a>.</p><div class="rail">${vs.slice(0,12).map(v=>`<button class="vt" data-vid="${esc(v.key)}"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/${encodeURIComponent(v.key)}/mqdefault.jpg"><span>${esc(v.type)}: ${esc(v.name)}</span></button>`).join("")}</div>`:""}</div>
+<div class="tp" id="tp-oyuncu">${cast.length?`<div class="cg">${cast.map(c=>`<div class="pc">${c.profile_path?`<img loading="lazy" alt="${esc(c.name)}" src="${IMG}w185${c.profile_path}">`:'<div class="ph">?</div>'}<b>${esc(c.name)}</b><span class="meta">${esc(c.character||"")}</span></div>`).join("")}</div>`:'<p class="meta">Kadro bilgisi yok.</p>'}</div>
+<div class="tp" id="tp-kunye"><dl class="kd">${tv?diziInfo(x):filmInfo(x)}</dl>${seasons?`<h3>Sezonlar</h3><div class="chips">${seasons}</div>`:""}</div>
+<div class="tp" id="tp-benzer"><div class="grid">${S.sim.map((r,i)=>card(r,i,"m")).join("")||'<span class="meta">Benzer yapım bulunamadı.</span>'}</div></div></div>`;
+const c=L[it.type+it.id];if(c&&!(c.genres||[]).length){c.genres=S.gn;save()}
+S.vk=vs[0]&&vs[0].key;if(OMDB&&im)fetch("https://www.omdbapi.com/?i="+im+"&apikey="+OMDB).then(r=>r.json()).then(d=>{const r=$("#rt");if(r&&d.imdbRating&&d.imdbRating!="N/A")r.innerHTML='<b class="im">IMDb</b> ★ '+esc(d.imdbRating)+"<small>/10</small>"}).catch(()=>{});
+ctl()}).catch(()=>{$("#app").innerHTML=W('<div class="note">Detaylar alınamadı. <button data-back="1">← Geri</button></div>')})}
+/* yönlendirme */
+function go(v){S.key=v;S.view=VW[v];document.title=TITLE;
+if(v=="filmler"||v=="diziler"){const t=v=="diziler"?"tv":"movie";if(S.type!=t||!S.items.length||S.q){S.type=t;S.genre="";S.q="";$("#q").value="";busy=false;load(true)}else draw()}else draw();
+if(location.hash.slice(1)!=v)location.hash=v;scrollTo(0,0)}
+function route(force){const h=location.hash.slice(1),m=h.match(/^(film|dizi)\/(\d+)$/);
+if(m){showDetail(m[1]=="dizi"?"tv":"movie",+m[2]);return}
+const v=VW[h]?h:"home";if(force||v!=S.key||S.view=="detay")go(v)}
 document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;const D=t.dataset;
 if(D.v)go(D.v);
-else if(D.hd!==undefined){S.hi=+D.hd;setHero()}
-else if(D.hh)openIt(S.hero[S.hi]);
+else if(D.ar){slide(S.hi+ +D.ar)}
+else if(D.hd!==undefined)slide(+D.hd);
+else if(D.hh!==undefined)openIt(S.hero[+D.hh]);
 else if(D.r!==undefined){const q=D.r.split("-");openIt(S.rows[q[0]][1][q[1]])}
-else if(D.t){S.type=D.t;S.genre="";load(true)}
+else if(D.tab)tab(D.tab);
 else if(D.more){S.page++;load()}
 else if(D.i!==undefined)openIt(S.items[+D.i]);
 else if(D.l!==undefined)openIt(L[D.l]);
-else if(D.x)$("#dlg").close();
-else if(D.star){const c=ent(),n=+D.star;c.my=c.my==n?0:n;if(c.status=="İzlenecek"){c.status="İzlendi"}if(c.status=="İzlendi"&&!c.date)c.date=today();save();ctl();draw()}
-else if(D.s!==undefined){const d=$("#dlg"),it=d._it;if(D.s){const c=ent();c.status=D.s;if(D.s=="İzlendi"&&!c.date)c.date=today()}else delete L[it.type+it.id];save();ctl();draw()}
+else if(D.m!==undefined)openIt(S.sim[+D.m]);
+else if(D.back){history.length>1?history.back():go("home")}
+else if(D.play)playV(S.vk);
+else if(D.vid)playV(D.vid);
+else if(D.star){const c=ent(),n=+D.star;c.my=c.my==n?0:n;if(c.status=="İzlenecek")c.status="İzlendi";if(c.status=="İzlendi"&&!c.date)c.date=today();save();ctl()}
+else if(D.s!==undefined){if(D.s){const c=ent();c.status=D.s;if(D.s=="İzlendi"&&!c.date)c.date=today()}else delete L[S.cur.type+S.cur.id];save();ctl()}
 else if(t.id=="th"){const r=document.documentElement,dk=r.dataset.theme?r.dataset.theme=="dark":matchMedia("(prefers-color-scheme: dark)").matches;r.dataset.theme=dk?"light":"dark"}});
 document.addEventListener("change",e=>{const i=e.target;
 if(i.id=="cat"){S.cat=i.value;load(true)}
 else if(i.id=="gn"){S.genre=i.value;load(true)}
 else if(i.id=="se"||i.id=="ep"){const c=ent();c.s=+$("#se").value||1;c.e=+$("#ep").value||0;save()}
-else if(i.id=="nt"){ent().note=i.value;save();draw()}});
-$("#q").addEventListener("input",e=>{clearTimeout(timer);const v=e.target.value.trim();timer=setTimeout(()=>{if(!KEY)return;S.q=v;S.genre="";S.view="kesfet";location.hash="kesfet";busy=false;load(true)},450)});
-addEventListener("hashchange",()=>{const v=location.hash.slice(1);if(["home","kesfet","liste","istatistik"].includes(v)&&v!=S.view)go(v)});
-setInterval(()=>{if(S.view=="home"&&S.hero.length&&!$("#dlg").open){S.hi=(S.hi+1)%S.hero.length;setHero()}},7000);
-(function init(){const v=location.hash.slice(1);if(["home","kesfet","liste","istatistik"].includes(v))S.view=v;nav();
+else if(i.id=="nt"){ent().note=i.value;save()}});
+$("#q").addEventListener("input",e=>{clearTimeout(timer);const v=e.target.value.trim();timer=setTimeout(()=>{if(!KEY)return;S.q=v;S.genre="";S.view="kesfet";S.key=S.type=="tv"?"diziler":"filmler";if(location.hash.slice(1)!=S.key)location.hash=S.key;busy=false;load(true)},450)});
+document.addEventListener("keydown",e=>{if(S.view!="home"||/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;if(e.key=="ArrowLeft")slide(S.hi-1);if(e.key=="ArrowRight")slide(S.hi+1)});
+addEventListener("hashchange",()=>route());
+setInterval(()=>{if(S.view=="home"&&S.hero.length&&!document.hidden)slide(S.hi+1)},7000);
+(function init(){nav();
 if(!KEY){setup();return}
-Promise.all([api("/genre/movie/list"),api("/genre/tv/list")]).then(r=>{S.genres.movie=r[0].genres;S.genres.tv=r[1].genres}).catch(()=>{}).then(()=>{loadHome();if(S.view=="kesfet")load(true);else draw()})})();
+Promise.all([api("/genre/movie/list"),api("/genre/tv/list")]).then(r=>{S.genres.movie=r[0].genres;S.genres.tv=r[1].genres}).catch(()=>{}).then(()=>{loadHome();route(true)})})();
 </script>
 </body>
 </html>
