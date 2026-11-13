@@ -41,6 +41,19 @@ iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;margin-top:12px}
 .more{display:block;margin:20px auto}
 footer{max-width:1100px;margin:20px auto;padding:0 20px 30px;color:var(--mu);font-size:13px}
 a{color:var(--ac)}
+header{backdrop-filter:blur(12px);background:color-mix(in srgb,var(--bg) 82%,transparent)}
+.hero{min-height:380px;display:flex;flex-direction:column;justify-content:flex-end;transition:background-image .6s}
+.dots{display:flex;gap:6px;margin-top:14px}
+.dot{width:10px;height:10px;padding:0;border:0;border-radius:50%;background:#fff6}
+.dot.on{background:#fff;width:26px;border-radius:6px}
+.card{position:relative;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 12px 26px #0006}
+.bd{position:absolute;top:8px;right:8px;background:#000b;color:#fff;font-size:12px;padding:2px 8px;border-radius:999px}
+.rail{display:flex;gap:14px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x proximity}
+.rail .card{flex:0 0 150px;scroll-snap-align:start}
+.sk{height:380px;border-radius:18px;background:linear-gradient(90deg,var(--sf),var(--bd),var(--sf));background-size:200% 100%;animation:sh 1.2s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+.ban{height:190px;margin:-20px -20px 14px;background:center/cover;border-radius:18px 18px 0 0}
 </style>
 </head>
 <body>
@@ -56,7 +69,7 @@ Bu ürün TMDB API’sini kullanır, ancak TMDB tarafından onaylanmamış veya 
 var KEY="3108265ab3fdbf3af14175edf64a9c7f";
 var API="https://api.themoviedb.org/3",IMG="https://image.tmdb.org/t/p/",REGION="TR";
 var ST=["İzlenecek","İzleniyor","İzlendi"];
-var S={view:"kesfet",type:"movie",cat:"trending",genre:"",q:"",page:1,total:1,items:[],genres:{movie:[],tv:[]}},L={},busy=false,timer;
+var S={view:"home",type:"movie",cat:"trending",genre:"",q:"",page:1,total:1,items:[],genres:{movie:[],tv:[]}},L={},busy=false,timer;
 try{L=JSON.parse(localStorage.getItem("sinemo")||"{}")}catch(e){}
 function save(){try{localStorage.setItem("sinemo",JSON.stringify(L))}catch(e){}}
 var $=function(s){return document.querySelector(s)};
@@ -64,8 +77,8 @@ function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){retur
 function api(p,o){var u=new URL(API+p);u.searchParams.set("api_key",KEY);u.searchParams.set("language","tr-TR");for(var k in o||{})u.searchParams.set(k,o[k]);return fetch(u).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
 function norm(r,t){return{id:r.id,type:r.media_type||t,title:r.title||r.name||"",poster:r.poster_path,back:r.backdrop_path,rating:r.vote_average||0,year:(r.release_date||r.first_air_date||"").slice(0,4),overview:r.overview||""}}
 function card(it,i,src){var ph=it.poster?'<img loading="lazy" alt="'+esc(it.title)+' afişi" src="'+IMG+'w342'+it.poster+'">':'<div class="ph">'+esc(it.title)+'</div>';
-var st=L[it.type+it.id];return '<button class="card" data-'+src+'="'+i+'">'+ph+'<div class="meta"><b>'+esc(it.title)+'</b>'+(it.type=="tv"?"Dizi":"Film")+(it.year?' · '+it.year:'')+(it.rating?' · ★ '+it.rating.toFixed(1):'')+(st?'<br>● '+st.status:'')+'</div></button>'}
-function nav(){$("#nav").innerHTML=[["kesfet","Keşfet"],["liste","Listem"],["istatistik","İstatistikler"]].map(function(t){return '<button class="'+(S.view==t[0]?"on":"")+'" data-v="'+t[0]+'">'+t[1]+'</button>'}).join("")}
+var st=L[it.type+it.id];return '<button class="card" data-'+src+'="'+i+'">'+ph+(it.rating?'<span class="bd">★ '+it.rating.toFixed(1)+'</span>':'')+'<div class="meta"><b>'+esc(it.title)+'</b>'+(it.type=="tv"?"Dizi":"Film")+(it.year?' · '+it.year:'')+(it.rating?' · ★ '+it.rating.toFixed(1):'')+(st?'<br>● '+st.status:'')+'</div></button>'}
+function nav(){$("#nav").innerHTML=[["home","Ana Sayfa"],["kesfet","Keşfet"],["liste","Listem"],["istatistik","İstatistikler"]].map(function(t){return '<button class="'+(S.view==t[0]?"on":"")+'" data-v="'+t[0]+'">'+t[1]+'</button>'}).join("")}
 function setup(){$("#app").innerHTML='<div class="note"><h2>Kurulum gerekli</h2><p>Bu site film ve dizi verilerini TMDB’den çeker. <code>index.html</code> dosyasının başındaki <code>KEY</code> değişkenine ücretsiz API anahtarını yapıştır:</p><ol><li><a href="https://www.themoviedb.org/signup">themoviedb.org</a> hesabı aç</li><li>Ayarlar → API bölümünden “API Key (v3)” değerini al</li><li>Dosyayı kaydet ve GitHub’a yükle</li></ol></div>'}
 function load(reset){
 if(busy)return;busy=true;if(reset){S.page=1;S.items=[]}
@@ -75,6 +88,7 @@ else if(S.genre){p="/discover/"+t;o.with_genres=S.genre;o.sort_by=S.cat=="top"?"
 else p=S.cat=="trending"?"/trending/"+t+"/week":"/"+t+"/"+(S.cat=="top"?"top_rated":"popular");
 api(p,o).then(function(d){S.total=d.total_pages;S.items=S.items.concat(d.results.map(function(r){return norm(r,t)}));busy=false;draw()}).catch(function(){busy=false;$("#app").innerHTML='<div class="note">Veriler alınamadı. API anahtarını ve internet bağlantını kontrol et.</div>'})}
 function draw(){
+if(S.view=="home"){drawHome();nav();return}
 if(S.view=="kesfet"){
 var gs=S.genres[S.type],h="",hero=S.items[0];
 if(hero&&!S.q&&!S.genre&&hero.back)h+='<div class="hero" style="background-image:url('+IMG+'w1280'+hero.back+')"><small>BU HAFTA ÖNE ÇIKAN</small><h1>'+esc(hero.title)+'</h1><p>'+esc(hero.overview)+'</p><button data-h="0">Detay, Fragman ve Liste</button></div>';
@@ -91,21 +105,39 @@ a.forEach(function(x){(x.genres||[]).forEach(function(g){gc[g]=(gc[g]||0)+1})});
 var top=Object.keys(gc).sort(function(x,y){return gc[y]-gc[x]}).slice(0,6),avg=w.length?(w.reduce(function(s,x){return s+x.rating},0)/w.length).toFixed(1):"–";
 $("#app").innerHTML='<div class="stat"><div class="box"><b>'+a.length+'</b>Listedeki yapım</div><div class="box"><b>'+w.length+'</b>İzlenen</div><div class="box"><b>'+a.filter(function(x){return x.status=="İzleniyor"}).length+'</b>İzleniyor</div><div class="box"><b>'+avg+'</b>İzlenenlerin ort. TMDB puanı</div></div><h2 class="sec">En çok listelediğin türler</h2>'+(top.map(function(g){return esc(g)+' ('+gc[g]+')<div class="bar" style="width:'+Math.min(100,gc[g]*20)+'%"></div>'}).join("")||'<span class="meta">Listene yapım ekledikçe burada görünür.</span>');
 }nav()}
+S.hi=0;
+function go(v){S.view=v;if(location.hash.slice(1)!=v)location.hash=v;if(v=="kesfet"&&!S.items.length)load(true);else draw();scrollTo(0,0)}
+function loadHome(){Promise.all([api("/trending/all/week"),api("/trending/movie/week"),api("/trending/tv/week"),api("/movie/top_rated"),api("/tv/popular")]).then(function(r){
+var n=function(d,t){return d.results.map(function(x){return norm(x,t)})};
+S.rows=[["🔥 Bu Hafta Herkes Bunu İzliyor",n(r[1],"movie")],["📺 Haftanın Dizileri",n(r[2],"tv")],["⭐ En Yüksek Puanlı Filmler",n(r[3],"movie")],["Popüler Diziler",n(r[4],"tv")]];
+S.hero=n(r[0]).filter(function(x){return x.back}).slice(0,5);draw()}).catch(function(){})}
+function heroIn(){var h=S.hero[S.hi];return '<small>HAFTANIN ÖNE ÇIKANI · '+(h.type=="tv"?"DİZİ":"FİLM")+'</small><h1>'+esc(h.title)+'</h1><p>'+esc(h.overview)+'</p><div class="row"><button class="on" data-hh="1">▶ Detay &amp; Fragman</button><span>★ '+h.rating.toFixed(1)+(h.year?' · '+h.year:'')+'</span></div><div class="dots">'+S.hero.map(function(_,i){return '<button class="dot'+(i==S.hi?' on':'')+'" data-hd="'+i+'" aria-label="Slayt '+(i+1)+'"></button>'}).join("")+'</div>'}
+function setHero(){var e=$("#hero");if(e&&S.hero&&S.hero.length){e.style.backgroundImage='url('+IMG+'w1280'+S.hero[S.hi].back+')';e.innerHTML=heroIn()}}
+function drawHome(){if(!S.rows){$("#app").innerHTML='<div class="sk"></div>';return}
+var h='<div class="hero" id="hero"></div>';
+var c=Object.keys(L).map(function(k){return L[k]}).filter(function(x){return x.status=="İzleniyor"});
+if(c.length)h+='<h2 class="sec">▶ İzlemeye Devam Et</h2><div class="rail">'+c.map(function(x){return card(x,x.type+x.id,"l")}).join("")+'</div>';
+S.rows.forEach(function(r,ri){h+='<h2 class="sec">'+r[0]+'</h2><div class="rail">'+r[1].map(function(x,i){return card(x,ri+"-"+i,"r")}).join("")+'</div>'});
+$("#app").innerHTML=h;setHero()}
+setInterval(function(){if(S.view=="home"&&S.hero&&S.hero.length&&!$("#dlg").open){S.hi=(S.hi+1)%S.hero.length;setHero()}},7000);
 function openIt(it){
 var d=$("#dlg");d.innerHTML="Yükleniyor…";d.showModal();
-api("/"+it.type+"/"+it.id,{append_to_response:"videos,watch/providers",include_video_language:"tr,en,null"}).then(function(x){
+api("/"+it.type+"/"+it.id,{append_to_response:"videos,watch/providers,credits",include_video_language:"tr,en,null"}).then(function(x){
 var k=it.type+it.id,cur=L[k],gn=(x.genres||[]).map(function(g){return g.name});
 var v=(x.videos&&x.videos.results||[]).filter(function(y){return y.site=="YouTube"}).sort(function(a,b){return(b.type=="Trailer")-(a.type=="Trailer")})[0];
 var pr=x["watch/providers"]&&x["watch/providers"].results&&x["watch/providers"].results[REGION],fl=pr&&(pr.flatrate||[]).map(function(p){return p.provider_name});
-var h='<h2 style="margin:0">'+esc(it.title)+'</h2><p class="meta" style="padding:4px 0">'+(it.type=="tv"?"Dizi":"Film")+(it.year?' · '+it.year:'')+' · ★ '+it.rating.toFixed(1)+' · '+esc(gn.join(", "))+(x.runtime?' · '+x.runtime+' dk':'')+(x.number_of_seasons?' · '+x.number_of_seasons+' sezon':'')+'</p><p>'+esc(it.overview||"Türkçe özet bulunamadı.")+'</p>';
-h+='<p><b>Nerede izlenir (TR):</b> '+(fl&&fl.length?esc(fl.join(", ")):'Abonelikli platform bilgisi yok')+(pr&&pr.link?' · <a target="_blank" rel="noopener" href="'+esc(pr.link)+'">tüm seçenekler</a>':'')+'</p>';
+var h=(x.backdrop_path?'<div class="ban" style="background-image:url('+IMG+'w780'+x.backdrop_path+')"></div>':'')+'<h2 style="margin:0">'+esc(it.title)+'</h2><p class="meta" style="padding:4px 0">'+(it.type=="tv"?"Dizi":"Film")+(it.year?' · '+it.year:'')+' · ★ '+it.rating.toFixed(1)+' · '+esc(gn.join(", "))+(x.runtime?' · '+x.runtime+' dk':'')+(x.number_of_seasons?' · '+x.number_of_seasons+' sezon':'')+'</p><p>'+esc(it.overview||"Türkçe özet bulunamadı.")+'</p>';
+var cs=(x.credits&&x.credits.cast||[]).slice(0,8).map(function(c){return esc(c.name)});if(cs.length)h+='<p><b>Oyuncular:</b> '+cs.join(', ')+'</p>';h+='<p><b>Nerede izlenir (TR):</b> '+(fl&&fl.length?esc(fl.join(", ")):'Abonelikli platform bilgisi yok')+(pr&&pr.link?' · <a target="_blank" rel="noopener" href="'+esc(pr.link)+'">tüm seçenekler</a>':'')+'</p>';
 if(v)h+='<iframe loading="lazy" allowfullscreen title="Fragman" src="https://www.youtube-nocookie.com/embed/'+encodeURIComponent(v.key)+'"></iframe>';
 h+='<div class="row">'+ST.map(function(s){return '<button class="'+(cur&&cur.status==s?"on":"")+'" data-s="'+s+'">'+s+'</button>'}).join("")+'</div>';
 if(it.type=="tv"&&cur)h+='<div class="row">Sezon <input id="se" type="number" min="1" style="width:70px" value="'+(cur.s||1)+'"> Bölüm <input id="ep" type="number" min="0" style="width:70px" value="'+(cur.e||0)+'"></div>';
 h+='<div class="row"><button data-s="">Listeden çıkar</button><button data-x="1">Kapat</button></div>';
 d.innerHTML=h;d._it=it;d._gn=gn}).catch(function(){d.innerHTML='Detaylar alınamadı. <button data-x="1">Kapat</button>'})}
 document.addEventListener("click",function(e){var t=e.target.closest("button");if(!t)return;var D=t.dataset;
-if(D.v){S.view=D.v;location.hash=D.v;draw()}
+if(D.v){go(D.v)}
+else if(D.hd!==undefined){S.hi=+D.hd;setHero()}
+else if(D.hh){openIt(S.hero[S.hi])}
+else if(D.r!==undefined){var q=D.r.split("-");openIt(S.rows[q[0]][1][q[1]])}
 else if(D.t){S.type=D.t;S.genre="";S.q="";load(true)}
 else if(D.more){S.page++;load()}
 else if(D.h!==undefined){openIt(S.items[0])}
@@ -121,10 +153,10 @@ if(i.id=="cat"){S.cat=i.value;load(true)}
 else if(i.id=="gn"){S.genre=i.value;load(true)}
 else if(i.id=="se"||i.id=="ep"){var it=$("#dlg")._it,c=it&&L[it.type+it.id];if(c){c.s=+$("#se").value||1;c.e=+$("#ep").value||0;save()}}});
 document.addEventListener("input",function(e){if(e.target.id=="q"){clearTimeout(timer);var v=e.target.value;timer=setTimeout(function(){S.q=v.trim();S.genre="";load(true);setTimeout(function(){var q=$("#q");if(q){q.focus();q.setSelectionRange(q.value.length,q.value.length)}},400)},450)}});
-addEventListener("hashchange",function(){var v=location.hash.slice(1);if(["kesfet","liste","istatistik"].indexOf(v)>-1){S.view=v;draw()}});
-(function init(){var v=location.hash.slice(1);if(["liste","istatistik"].indexOf(v)>-1)S.view=v;nav();
+addEventListener("hashchange",function(){var v=location.hash.slice(1);if(["home","kesfet","liste","istatistik"].indexOf(v)>-1){go(v)}});
+(function init(){var v=location.hash.slice(1);if(["home","kesfet","liste","istatistik"].indexOf(v)>-1)S.view=v;nav();
 if(!KEY){setup();return}
-Promise.all([api("/genre/movie/list"),api("/genre/tv/list")]).then(function(r){S.genres.movie=r[0].genres;S.genres.tv=r[1].genres}).catch(function(){}).then(function(){load(true)})})();
+Promise.all([api("/genre/movie/list"),api("/genre/tv/list")]).then(function(r){S.genres.movie=r[0].genres;S.genres.tv=r[1].genres}).catch(function(){}).then(function(){loadHome();if(S.view=="kesfet")load(true);else draw()})})();
 </script>
 </body>
 </html>
