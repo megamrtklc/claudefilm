@@ -6,9 +6,8 @@
 <meta name="description" content="Sinemo: film ve dizileri keşfet, fragmanları izle, nerede yayınlandığını gör; günlüğünü, puanlarını ve izleme ilerlemeni tek yerde tut.">
 <title>Sinemo – Film ve Dizi Günlüğün</title>
 <style>
-:root{--bg:#f4f0e8;--sf:#fffdf8;--tx:#1c1a17;--mu:#6d675d;--ac:#c2410c;--gr:#15803d;--bd:#e2dbcd;color-scheme:light}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14181c;--sf:#1c2228;--tx:#eee9df;--mu:#9aa3ab;--ac:#ff8a3d;--gr:#4ade80;--bd:#2a323a;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#14181c;--sf:#1c2228;--tx:#eee9df;--mu:#9aa3ab;--ac:#ff8a3d;--gr:#4ade80;--bd:#2a323a;color-scheme:dark}
+:root{--bg:#0b0b0e;--sf:#16161b;--tx:#f4f4f5;--mu:#a1a1aa;--ac:#e5383b;--gr:#fbbf24;--bd:#26262d;color-scheme:dark}
+:root[data-theme="light"]{--bg:#f6f6f7;--sf:#ffffff;--tx:#111114;--mu:#5f5f68;--ac:#d62839;--gr:#b45309;--bd:#e3e3e8;color-scheme:light}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
 h1,h2,h3{font-family:Georgia,"Times New Roman",serif}
@@ -125,6 +124,39 @@ textarea{width:100%;margin-top:10px;resize:vertical}input[type=number]{width:72p
 .bio{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-line;margin:0 0 6px}.bio.open{display:block}
 .fr{display:grid;grid-template-columns:56px 1fr;width:100%;text-align:left;border:0;border-bottom:1px solid var(--bd);border-radius:0;background:none;padding:9px 0}.fr:hover b{color:var(--ac)}
 @media(max-width:820px){.pp{grid-template-columns:1fr}.pimg{width:160px}}
+/* sinematik karanlık */
+h1,h2,h3{font-family:inherit;font-weight:700;letter-spacing:-.01em}
+button,select,input,textarea{border-radius:6px}
+.hd{--tx:#f4f4f5;--mu:#d4d4d8;position:fixed;left:0;right:0;border:0;background:linear-gradient(#000d,#0000);backdrop-filter:none;transition:background .3s}
+.hd.sc{background:#0b0b0ef2;backdrop-filter:blur(12px);border-bottom:1px solid #26262d}
+.logo{font:800 22px system-ui,sans-serif;letter-spacing:.24em;color:var(--ac)}
+.nv{color:#d4d4d8;border-radius:0}.nv:hover{color:#fff}.nv.on{color:#fff;box-shadow:inset 0 -2px var(--ac)}
+.hs input{background:#0009;border-color:#fff3;color:#fff;border-radius:999px}.hs button{background:#0009;border-color:#fff3;color:#fff}
+.pg{padding-top:100px}
+.mh{height:min(88vh,760px);min-height:540px}
+.sl::before{background:linear-gradient(90deg,#000f 0,#000b 30%,#0000 75%),linear-gradient(0deg,var(--bg) 0,#0000 35%),linear-gradient(180deg,#000b 0,#0000 24%)}
+.st{max-width:580px}.st h1{font-size:clamp(38px,6.5vw,78px);font-weight:800;line-height:1;letter-spacing:-.03em;margin:8px 0 12px}
+.st p{-webkit-line-clamp:2;font-size:17px;color:#e4e4e7}.st small{letter-spacing:.2em;color:#fca5a5}
+.st .on{background:var(--ac);border:0;padding:12px 26px;font-size:16px;font-weight:700}
+.pt{width:74px;border-radius:6px}.pt.on{border-color:#fff}
+.card{border:0;border-radius:6px;background:#000}
+.card:hover{transform:scale(1.08);box-shadow:0 16px 40px #000c;z-index:2}
+.rail{gap:10px;padding:14px 4px 22px}.rail .card{flex:0 0 170px}
+.grid{gap:10px;grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+.rh{margin:34px 0 4px}.rh h2{font-size:20px}
+.bd{background:#000a;top:8px;right:8px}.ov{background:linear-gradient(transparent,#000f)}
+.rk{font-family:system-ui,sans-serif;font-weight:900;-webkit-text-stroke:3px #52525b}.tk:hover .rk{-webkit-text-stroke-color:var(--ac)}
+.wd{flex:0 0 340px;height:190px;border-radius:6px}.fe{border-radius:6px}
+.fe b,.pv b,.box b,.ln{font-family:inherit;font-weight:800}
+.lr{border:0;border-bottom:1px solid var(--bd);border-radius:0;background:none}
+.dh{min-height:min(78vh,640px);display:flex;align-items:flex-end;background-position:center top}
+.dh::before{background:linear-gradient(90deg,#000f 0,#000b 35%,#0000 85%),linear-gradient(0deg,var(--bg) 0,#0000 45%),linear-gradient(180deg,#000b 0,#0000 25%)}
+.dhin{padding-top:110px;width:100%}.di h1{font-size:clamp(34px,5vw,60px);font-weight:800;letter-spacing:-.03em}
+.dp{width:200px;border-radius:6px}.chip{background:#0008;border-radius:4px}
+.tb.on{color:#fff;box-shadow:inset 0 -3px var(--ac)}
+.pl,.card2,.box{border-radius:8px}
+.ft{--tx:#f4f4f5;--mu:#a1a1aa;--bd:#1d1d23;background:#050507;border-top:1px solid #1d1d23}
+@media(max-width:820px){.pg{padding-top:150px}.dhin{padding-top:150px}.st h1{font-size:36px}.wd{flex-basis:260px;height:150px}.rail .card{flex-basis:140px}}
 </style>
 </head>
 <body>
@@ -274,7 +306,7 @@ else if(D.play)playV(S.vk);
 else if(D.vid)playV(D.vid);
 else if(D.star){const c=ent(),n=+D.star;c.my=c.my==n?0:n;if(c.status=="İzlenecek")c.status="İzlendi";if(c.status=="İzlendi"&&!c.date)c.date=today();save();ctl()}
 else if(D.s!==undefined){if(D.s){const c=ent();c.status=D.s;if(D.s=="İzlendi"&&!c.date)c.date=today()}else delete L[S.cur.type+S.cur.id];save();ctl()}
-else if(t.id=="th"){const r=document.documentElement,dk=r.dataset.theme?r.dataset.theme=="dark":matchMedia("(prefers-color-scheme: dark)").matches;r.dataset.theme=dk?"light":"dark"}});
+else if(t.id=="th"){const r=document.documentElement,dk=r.dataset.theme!="light";r.dataset.theme=dk?"light":"dark"}});
 document.addEventListener("change",e=>{const i=e.target;
 if(i.id=="cat"){S.cat=i.value;load(true)}
 else if(i.id=="gn"){S.genre=i.value;load(true)}
@@ -283,6 +315,7 @@ else if(i.id=="nt"){ent().note=i.value;save()}});
 $("#q").addEventListener("input",e=>{clearTimeout(timer);const v=e.target.value.trim();timer=setTimeout(()=>{if(!KEY)return;S.q=v;S.genre="";S.view="kesfet";S.key=S.type=="tv"?"diziler":"filmler";if(location.hash.slice(1)!=S.key)location.hash=S.key;busy=false;load(true)},450)});
 document.addEventListener("keydown",e=>{if(S.view!="home"||/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;if(e.key=="ArrowLeft")slide(S.hi-1);if(e.key=="ArrowRight")slide(S.hi+1)});
 addEventListener("hashchange",()=>route());
+const onScroll=()=>$(".hd").classList.toggle("sc",scrollY>40);addEventListener("scroll",onScroll,{passive:true});onScroll();
 setInterval(()=>{if(S.view=="home"&&S.hero.length&&!document.hidden)slide(S.hi+1)},7000);
 (function init(){nav();
 if(!KEY){setup();return}
