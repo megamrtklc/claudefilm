@@ -142,7 +142,8 @@ var OMDB="7a4d7795"; /* İsteğe bağlı: omdbapi.com'dan ücretsiz anahtar alı
 const API="https://api.themoviedb.org/3",IMG="https://image.tmdb.org/t/p/",REGION="TR",ST=["İzlenecek","İzleniyor","İzlendi"],TITLE="Sinemo – Film ve Dizi Günlüğün";
 const VW={home:"home",filmler:"kesfet",diziler:"kesfet",liste:"liste",gunluk:"istatistik"};
 const S={view:"home",key:"home",type:"movie",cat:"trending",genre:"",q:"",page:1,total:1,items:[],genres:{movie:[],tv:[]},rows:null,hero:[],hi:0,cur:null,gn:[],sim:[]};
-let L={},busy=false,timer;
+let L={},LS=[],busy=false,timer;
+try{LS=JSON.parse(localStorage.getItem("sinemo_lists")||"[]")}catch(e){}
 try{L=JSON.parse(localStorage.getItem("sinemo")||"{}")}catch(e){}
 const save=()=>{try{localStorage.setItem("sinemo",JSON.stringify(L))}catch(e){}};
 const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s),vals=()=>Object.keys(L).map(k=>L[k]),W=h=>`<div class="wrap pg">${h}</div>`;
@@ -184,17 +185,23 @@ if(S.view=="home")return drawHome();
 if(S.view=="kesfet"){const gs=S.genres[S.type];
 $("#app").innerHTML=W(`<h1 class="h1t">${S.q?`“${esc(S.q)}” için sonuçlar`:S.type=="tv"?"Diziler":"Filmler"}</h1><div class="tools"><select id="cat" aria-label="Kategori">${[["trending","Haftanın trendleri"],["popular","Popüler"],["top","En yüksek puanlı"]].map(c=>`<option value="${c[0]}"${S.cat==c[0]?" selected":""}>${c[1]}</option>`).join("")}</select><select id="gn" aria-label="Tür"><option value="">Tüm türler</option>${gs.map(g=>`<option value="${g.id}"${S.genre==g.id?" selected":""}>${esc(g.name)}</option>`).join("")}</select></div><div class="grid">${S.items.map((it,i)=>card(it,i,"i")).join("")||"Sonuç bulunamadı."}</div>${S.page<S.total?'<button class="more" data-more="1">Daha fazla göster</button>':""}`);
 }else if(S.view=="liste"){const a=vals();
-$("#app").innerHTML=W('<h1 class="h1t">Listem</h1>'+ST.map(s=>{const r=a.filter(x=>x.status==s);return `<h2 class="sec">${s} (${r.length})</h2><div class="grid">${r.map(x=>card(x,x.type+x.id,"l")).join("")||'<span class="meta">Henüz yok.</span>'}</div>`}).join(""));
+$("#app").innerHTML=W('<h1 class="h1t">Listem</h1>'+ST.map(s=>{const r=a.filter(x=>x.status==s);return `<h2 class="sec">${s} (${r.length})</h2><div class="grid">${r.map(x=>card(x,x.type+x.id,"l")).join("")||'<span class="meta">Henüz yok.</span>'}</div>`}).join("")+customLists());
 }else{const a=vals(),w=a.filter(x=>x.status=="İzlendi"),yr=String(new Date().getFullYear()),wy=w.filter(x=>(x.date||"").slice(0,4)==yr),r=w.filter(x=>x.my),gc={},dist=[0,0,0,0,0,0];
 a.forEach(x=>(x.genres||[]).forEach(g=>gc[g]=(gc[g]||0)+1));r.forEach(x=>dist[x.my]++);
 const top=Object.keys(gc).sort((x,y)=>gc[y]-gc[x]).slice(0,6),avg=r.length?(r.reduce((s,x)=>s+x.my,0)/r.length).toFixed(1):"–",di=w.filter(x=>x.date).sort((x,y)=>y.date.localeCompare(x.date)).slice(0,12);
 $("#app").innerHTML=W(`<h1 class="h1t">${yr} özetin</h1><div class="stat"><div class="box"><b>${a.length}</b>Listede</div><div class="box"><b>${wy.length}</b>Bu yıl izlenen</div><div class="box"><b>${wy.filter(x=>x.type=="movie").length} / ${wy.filter(x=>x.type=="tv").length}</b>Film / Dizi</div><div class="box"><b>${avg}</b>Ortalama puanın</div></div>
 <div class="two"><div><h2 class="sec" style="margin-top:0">Puan dağılımın</h2>${[5,4,3,2,1].map(n=>`<span class="my">${stars(n)}</span> ${dist[n]}<div class="bar" style="width:${Math.min(100,dist[n]*18)}%"></div>`).join("")}<h2 class="sec">En çok listelediğin türler</h2>${top.map(g=>`${esc(g)} (${gc[g]})<div class="bar" style="width:${Math.min(100,gc[g]*18)}%"></div>`).join("")||'<span class="meta">Listene yapım ekledikçe burada görünür.</span>'}</div>
 <div><h2 class="sec" style="margin-top:0">Günlük</h2>${di.map(x=>`<div class="dia"><span>${x.date}</span><span><b>${esc(x.title)}</b> <span class="my">${x.my?stars(x.my):""}</span>${x.note?`<br><span class="meta">${esc(x.note)}</span>`:""}</span></div>`).join("")||'<span class="meta">“İzlendi” işaretlediğin yapımlar tarihiyle burada görünür.</span>'}</div></div>`)}}
+/* özel listeler */
+const saveL=()=>{try{localStorage.setItem("sinemo_lists",JSON.stringify(LS))}catch(e){}};
+const snap=it=>({id:it.id,type:it.type,title:it.title,poster:it.poster,back:it.back,rating:it.rating,year:it.year,overview:it.overview});
+const inL=(l,it)=>l.items.some(x=>x.id==it.id&&x.type==it.type);
+const listBlock=it=>`<h3 style="margin:18px 0 6px">Özel listelerim</h3><div class="row" style="margin-top:0">${LS.map((l,i)=>`<button class="${inL(l,it)?"on":""}" data-lt="${i}">${esc(l.n)}</button>`).join("")||'<span class="meta">Henüz listen yok.</span>'}</div><div class="row"><input id="nl" placeholder="Yeni liste adı" maxlength="40" style="flex:1;min-width:0"><button data-newl="1">Oluştur</button></div>`;
+const customLists=()=>'<h2 class="sec" style="margin-top:34px">Özel listelerim</h2>'+(LS.map((l,i)=>`<div class="rh" style="margin:18px 0 8px"><h3 style="margin:0">${esc(l.n)} <span class="meta">(${l.items.length})</span></h3><button class="lk" data-dl="${i}">Listeyi sil</button></div><div class="grid">${l.items.map((x,j)=>card(x,i+"-"+j,"lc")).join("")||'<span class="meta">Bu listede henüz yapım yok.</span>'}</div>`).join("")||'<p class="meta">Henüz özel listen yok. Bir film veya dizi sayfasındaki “Özel listelerim” bölümünden oluşturabilirsin.</p>');
 /* detay */
 function ent(){const it=S.cur,k=it.type+it.id;return L[k]||(L[k]={id:it.id,type:it.type,title:it.title,poster:it.poster,back:it.back,rating:it.rating,year:it.year,overview:it.overview,genres:S.gn||[],status:"İzlenecek",s:1,e:0})}
 function ctl(){const it=S.cur,c=L[it.type+it.id]||{};
-$("#ctl").innerHTML=`<div class="row" style="margin-top:6px">${ST.map(s=>`<button class="${c.status==s?"on":""}" data-s="${s}">${s}</button>`).join("")}</div><div class="row">Puanın: ${[1,2,3,4,5].map(n=>`<button class="star${(c.my||0)>=n?" on":""}" data-star="${n}" aria-label="${n} yıldız">★</button>`).join("")}</div>${it.type=="tv"&&c.status?`<div class="row">Sezon <input id="se" type="number" min="1" value="${c.s||1}"> Bölüm <input id="ep" type="number" min="0" value="${c.e||0}"></div>`:""}${c.status?`<textarea id="nt" rows="2" placeholder="Kısa not veya yorum…">${esc(c.note||"")}</textarea><div class="row"><button data-s="">Listeden çıkar</button></div>`:""}`}
+$("#ctl").innerHTML=`<div class="row" style="margin-top:6px">${ST.map(s=>`<button class="${c.status==s?"on":""}" data-s="${s}">${s}</button>`).join("")}</div><div class="row">Puanın: ${[1,2,3,4,5].map(n=>`<button class="star${(c.my||0)>=n?" on":""}" data-star="${n}" aria-label="${n} yıldız">★</button>`).join("")}</div>${it.type=="tv"&&c.status?`<div class="row">Sezon <input id="se" type="number" min="1" value="${c.s||1}"> Bölüm <input id="ep" type="number" min="0" value="${c.e||0}"></div>`:""}${c.status?`<textarea id="nt" rows="2" placeholder="Kısa not veya yorum…">${esc(c.note||"")}</textarea><div class="row"><button data-s="">Listeden çıkar</button></div>`:""}${listBlock(it)}`}
 const openIt=it=>{location.hash=(it.type=="tv"?"dizi/":"film/")+it.id};
 const dt=s=>s?new Date(s).toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric"}):"",usd=n=>n?"$"+n.toLocaleString("tr-TR"):"";
 const trow=(k,v)=>v?`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`:"";
@@ -254,6 +261,10 @@ else if(D.more){S.page++;load()}
 else if(D.i!==undefined)openIt(S.items[+D.i]);
 else if(D.l!==undefined)openIt(L[D.l]);
 else if(D.m!==undefined)openIt(S.sim[+D.m]);
+else if(D.lt!==undefined){const l=LS[+D.lt],it=S.cur;if(inL(l,it))l.items=l.items.filter(x=>!(x.id==it.id&&x.type==it.type));else l.items.push(snap(it));saveL();ctl()}
+else if(D.newl){const v=($("#nl").value||"").trim();if(!v)return;let l=LS.find(z=>z.n.toLowerCase()==v.toLowerCase());if(!l){l={n:v,items:[]};LS.push(l)}if(!inL(l,S.cur))l.items.push(snap(S.cur));saveL();ctl()}
+else if(D.dl!==undefined){if(confirm("Bu liste silinsin mi?")){LS.splice(+D.dl,1);saveL();draw()}}
+else if(D.lc!==undefined){const q=D.lc.split("-");openIt(LS[q[0]].items[q[1]])}
 else if(D.p)location.hash="oyuncu/"+D.p;
 else if(D.pm!==undefined)openIt(S.pl[+D.pm]);
 else if(D.pf!==undefined)openIt(S.pf[+D.pf]);
