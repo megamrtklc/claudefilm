@@ -172,6 +172,7 @@ button,select,input,textarea{border-radius:6px}
 @media(max-width:820px){.rsi{flex-direction:column}.rsi img{width:100px}}
 .hd{padding-top:env(safe-area-inset-top,0px)}.ft{padding-bottom:env(safe-area-inset-bottom,0px)}
 .off{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--ac);color:#fff;text-align:center;padding:8px;font-size:14px}
+.fr.cl{grid-template-columns:170px 1fr}@media(max-width:820px){.fr.cl{grid-template-columns:110px 1fr}}
 </style>
 </head>
 <body>
@@ -180,7 +181,7 @@ button,select,input,textarea{border-radius:6px}
 <main id="app"></main>
 <footer class="ft"><div class="fw">
 <div><div class="logo" style="font-size:22px">SİNEMO</div><p>Film ve dizileri keşfet, fragmanları izle, listeni ve izleme günlüğünü tek yerde tut.</p></div>
-<div><h4>Sayfalar</h4><button class="fl" data-v="filmler">Filmler</button><button class="fl" data-v="diziler">Diziler</button><button class="fl" data-v="neizlesem">Ne izlesem?</button><button class="fl" id="inst" hidden>Uygulamayı yükle</button><p style="font-size:12px">iPhone’da: Paylaş → Ana Ekrana Ekle</p><button class="fl" data-v="liste">Listem</button><button class="fl" data-v="gunluk">Günlük</button></div>
+<div><h4>Sayfalar</h4><button class="fl" data-v="filmler">Filmler</button><button class="fl" data-v="diziler">Diziler</button><button class="fl" data-v="neizlesem">Ne izlesem?</button><button class="fl" data-v="takvim">Takvim</button><button class="fl" id="inst" hidden>Uygulamayı yükle</button><p style="font-size:12px">iPhone’da: Paylaş → Ana Ekrana Ekle</p><button class="fl" data-v="liste">Listem</button><button class="fl" data-v="gunluk">Günlük</button></div>
 <div><h4>Veri kaynakları</h4><p>Bu ürün TMDB API’sini kullanır, ancak TMDB tarafından onaylanmamış veya sertifikalandırılmamıştır.</p><p>Yayın platformu bilgileri JustWatch tarafından sağlanır.</p></div>
 </div><div class="fb">© 2026 Sinemo · Listelerin yalnızca bu tarayıcıda saklanır.</div></footer>
 <script>
@@ -188,7 +189,7 @@ button,select,input,textarea{border-radius:6px}
 var KEY="3108265ab3fdbf3af14175edf64a9c7f";
 var OMDB="7a4d7795"; /* İsteğe bağlı: omdbapi.com'dan ücretsiz anahtar alırsan oynatıcıda gerçek IMDb puanı görünür. */
 const API="https://api.themoviedb.org/3",IMG="https://image.tmdb.org/t/p/",REGION="TR",ST=["İzlenecek","İzleniyor","İzlendi"],TITLE="Sinemo – Film ve Dizi Günlüğün";
-const VW={home:"home",filmler:"kesfet",diziler:"kesfet",liste:"liste",gunluk:"istatistik",neizlesem:"oner"};
+const VW={home:"home",filmler:"kesfet",diziler:"kesfet",liste:"liste",gunluk:"istatistik",neizlesem:"oner",takvim:"takvim"};
 const S={view:"home",key:"home",type:"movie",cat:"trending",genre:"",f:{from:"",to:"",min:"",sort:"",prov:""},q:"",page:1,total:1,items:[],genres:{movie:[],tv:[]},rows:null,hero:[],hi:0,cur:null,gn:[],sim:[]};
 let L={},LS=[],busy=false,timer;
 try{LS=JSON.parse(localStorage.getItem("sinemo_lists")||"[]")}catch(e){}
@@ -201,8 +202,8 @@ function api(p,o){const u=new URL(API+p);u.searchParams.set("api_key",KEY);u.sea
 const norm=(r,t)=>({id:r.id,type:r.media_type||t,title:r.title||r.name||"",poster:r.poster_path,back:r.backdrop_path,rating:r.vote_average||0,year:(r.release_date||r.first_air_date||"").slice(0,4),overview:r.overview||""});
 function card(it,i,src){const c=L[it.type+it.id],ph=it.poster?`<img loading="lazy" alt="${esc(it.title)} afişi" src="${IMG}w342${it.poster}">`:`<div class="ph">${esc(it.title)}</div>`;
 return `<button class="card" data-${src}="${i}">${ph}${it.rating?`<span class="bd">★ ${it.rating.toFixed(1)}</span>`:""}<div class="ov"><b>${esc(it.title)}</b><br>${it.type=="tv"?"Dizi":"Film"}${it.year?" · "+it.year:""}${c?"<br>● "+c.status:""}</div>${c&&c.my?`<div class="my">${stars(c.my)}</div>`:""}</button>`}
-function nav(){const a=S.view=="kesfet"?(S.type=="tv"?"diziler":"filmler"):{home:"home",liste:"liste",istatistik:"gunluk",oner:"neizlesem"}[S.view]||"";
-$("#nv").innerHTML=[["home","Ana Sayfa"],["filmler","Filmler"],["diziler","Diziler"],["liste","Listem"],["gunluk","Günlük"],["neizlesem","Ne izlesem?"]].map(t=>`<button class="nv${a==t[0]?" on":""}" data-v="${t[0]}">${t[1]}</button>`).join("")}
+function nav(){const a=S.view=="kesfet"?(S.type=="tv"?"diziler":"filmler"):{home:"home",liste:"liste",istatistik:"gunluk",oner:"neizlesem",takvim:"takvim"}[S.view]||"";
+$("#nv").innerHTML=[["home","Ana Sayfa"],["filmler","Filmler"],["diziler","Diziler"],["liste","Listem"],["gunluk","Günlük"],["neizlesem","Ne izlesem?"],["takvim","Takvim"]].map(t=>`<button class="nv${a==t[0]?" on":""}" data-v="${t[0]}">${t[1]}</button>`).join("")}
 function setup(){$("#app").innerHTML=W('<div class="note"><h2>Kurulum gerekli</h2><p>Bu site film ve dizi verilerini TMDB’den çeker. <code>index.html</code> dosyasının başındaki <code>KEY</code> değişkenine ücretsiz API anahtarını yapıştır:</p><ol><li><a href="https://www.themoviedb.org/signup">themoviedb.org</a> hesabı aç</li><li>Ayarlar → API bölümünden “API Key (v3)” değerini al</li><li>Dosyayı kaydet ve GitHub’a yükle</li></ol></div>')}
 const fail=()=>{$("#app").innerHTML=W('<div class="note">Veriler alınamadı. İnternet bağlantını ve API anahtarını kontrol et.<div class="row"><button data-v="liste">Listemi aç</button></div></div>')};
 function load(reset){if(busy)return;busy=true;if(reset){S.page=1;S.items=[]}
@@ -236,6 +237,7 @@ function draw(){nav();
 if(S.view=="detay"||S.view=="oyuncu")return;
 if(S.view=="home")return drawHome();
 if(S.view=="oner")return drawOner();
+if(S.view=="takvim")return drawCal();
 if(S.view=="kesfet"){const gs=S.genres[S.type];
 $("#app").innerHTML=W(`<h1 class="h1t">${S.q?`“${esc(S.q)}” için sonuçlar`:S.type=="tv"?"Diziler":"Filmler"}</h1><div class="tools"><select id="cat" aria-label="Kategori">${[["trending","Haftanın trendleri"],["popular","Popüler"],["top","En yüksek puanlı"]].map(c=>`<option value="${c[0]}"${S.cat==c[0]?" selected":""}>${c[1]}</option>`).join("")}</select><select id="gn" aria-label="Tür"><option value="">Tüm türler</option>${gs.map(g=>`<option value="${g.id}"${S.genre==g.id?" selected":""}>${esc(g.name)}</option>`).join("")}</select></div><div class="tools"><select id="fmin" aria-label="Minimum puan"><option value="">Her puan</option>${[6,7,8].map(n=>`<option value="${n}"${S.f.min==n?" selected":""}>${n}+ puan</option>`).join("")}</select><select id="fsort" aria-label="Sıralama">${[["","Popülerlik"],["vote_average.desc","En yüksek puan"],["date","En yeni"]].map(z=>`<option value="${z[0]}"${S.f.sort==z[0]?" selected":""}>${z[1]}</option>`).join("")}</select><select id="fprov" aria-label="Platform"><option value="">Tüm platformlar</option>${[[8,"Netflix"],[119,"Prime Video"],[337,"Disney+"],[350,"Apple TV+"],[1899,"Max"]].map(z=>`<option value="${z[0]}"${S.f.prov==z[0]?" selected":""}>${z[1]}</option>`).join("")}</select><input id="ffrom" type="number" min="1900" max="2100" placeholder="Başlangıç yılı" value="${S.f.from}" style="width:140px"><input id="fto" type="number" min="1900" max="2100" placeholder="Bitiş yılı" value="${S.f.to}" style="width:130px">${S.genre||Object.values(S.f).some(Boolean)?'<button data-fclr="1">Filtreleri temizle</button>':""}</div><div class="grid">${S.items.map((it,i)=>card(it,i,"i")).join("")||"Sonuç bulunamadı."}</div>${S.page<S.total?'<button class="more" data-more="1">Daha fazla göster</button>':""}`);
 }else if(S.view=="liste"){const a=vals();
@@ -243,7 +245,7 @@ $("#app").innerHTML=W('<h1 class="h1t">Listem</h1>'+ST.map(s=>{const r=a.filter(
 }else{const a=vals(),w=a.filter(x=>x.status=="İzlendi"),yr=String(new Date().getFullYear()),wy=w.filter(x=>(x.date||"").slice(0,4)==yr),r=w.filter(x=>x.my),gc={},dist=[0,0,0,0,0,0];
 a.forEach(x=>(x.genres||[]).forEach(g=>gc[g]=(gc[g]||0)+1));r.forEach(x=>dist[x.my]++);
 const top=Object.keys(gc).sort((x,y)=>gc[y]-gc[x]).slice(0,6),avg=r.length?(r.reduce((s,x)=>s+x.my,0)/r.length).toFixed(1):"–",di=w.filter(x=>x.date).sort((x,y)=>y.date.localeCompare(x.date)).slice(0,12);
-$("#app").innerHTML=W(`<h1 class="h1t">${yr} özetin</h1><div class="stat"><div class="box"><b>${a.length}</b>Listede</div><div class="box"><b>${wy.length}</b>Bu yıl izlenen</div><div class="box"><b>${wy.filter(x=>x.type=="movie").length} / ${wy.filter(x=>x.type=="tv").length}</b>Film / Dizi</div><div class="box"><b>${avg}</b>Ortalama puanın</div></div>
+$("#app").innerHTML=W(`<h1 class="h1t">${yr} özetin</h1><div class="row" style="margin:-4px 0 18px"><button class="on" data-card="1">Özet kartını indir</button></div><div class="stat"><div class="box"><b>${a.length}</b>Listede</div><div class="box"><b>${wy.length}</b>Bu yıl izlenen</div><div class="box"><b>${wy.filter(x=>x.type=="movie").length} / ${wy.filter(x=>x.type=="tv").length}</b>Film / Dizi</div><div class="box"><b>${avg}</b>Ortalama puanın</div></div>
 <div class="two"><div><h2 class="sec" style="margin-top:0">Puan dağılımın</h2>${[5,4,3,2,1].map(n=>`<span class="my">${stars(n)}</span> ${dist[n]}<div class="bar" style="width:${Math.min(100,dist[n]*18)}%"></div>`).join("")}<h2 class="sec">En çok listelediğin türler</h2>${top.map(g=>`${esc(g)} (${gc[g]})<div class="bar" style="width:${Math.min(100,gc[g]*18)}%"></div>`).join("")||'<span class="meta">Listene yapım ekledikçe burada görünür.</span>'}</div>
 <div><h2 class="sec" style="margin-top:0">Günlük</h2>${di.map(x=>`<div class="dia"><span>${x.date}</span><span><b>${esc(x.title)}</b> <span class="my">${x.my?stars(x.my):""}</span>${x.note?`<br><span class="meta">${esc(x.note)}</span>`:""}</span></div>`).join("")||'<span class="meta">“İzlendi” işaretlediğin yapımlar tarihiyle burada görünür.</span>'}</div></div>`)}}
 /* özel listeler */
@@ -273,8 +275,9 @@ if(S.view!="oyuncu")return;
 const seen={},all=((x.combined_credits||{}).cast||[]).filter(c=>(c.media_type=="movie"||c.media_type=="tv")&&(c.title||c.name)).filter(c=>{const k=c.media_type+c.id;if(seen[k])return false;seen[k]=1;return true});
 S.pl=all.filter(c=>c.poster_path).sort((a,b)=>b.popularity-a.popularity).slice(0,12).map(c=>norm(c,c.media_type));
 S.pf=all.slice().sort((a,b)=>(b.release_date||b.first_air_date||"0").localeCompare(a.release_date||a.first_air_date||"0")).slice(0,40).map(c=>Object.assign(norm(c,c.media_type),{ch:c.character||""}));
+const dseen={};S.pd=((x.combined_credits||{}).crew||[]).filter(c=>c.job=="Director"&&(c.media_type=="movie"||c.media_type=="tv")&&c.poster_path).filter(c=>{const k=c.media_type+c.id;if(dseen[k])return false;dseen[k]=1;return true}).sort((a,b)=>b.popularity-a.popularity).slice(0,12).map(c=>norm(c,c.media_type));
 const age=x.birthday?Math.floor(((x.deathday?new Date(x.deathday):new Date())-new Date(x.birthday))/31557600000):"";document.title=x.name+" – Sinemo";
-$("#app").innerHTML=W(`<button data-back="1">← Geri</button><div class="pp" style="margin-top:18px"><div>${x.profile_path?`<img class="pimg" alt="${esc(x.name)}" src="${IMG}w342${x.profile_path}">`:'<div class="ph pimg">?</div>'}<dl class="kd" style="grid-template-columns:1fr;margin-top:14px">${trow("Bilinen alanı",x.known_for_department)}${trow("Doğum tarihi",dt(x.birthday))}${trow("Doğum yeri",x.place_of_birth)}${trow("Ölüm tarihi",dt(x.deathday))}${trow(x.deathday?"Öldüğünde yaşı":"Yaşı",age!==""?String(age):"")}</dl></div><div><h1 class="h1t">${esc(x.name)}</h1><h2 class="sec" style="margin-top:0">Biyografi</h2><p class="bio" id="bio">${esc(x.biography||"Biyografi bulunamadı.")}</p>${(x.biography||"").length>420?'<button class="lk" data-bio="1">Tümünü oku</button>':""}${x.bioEn?'<p class="meta">Türkçe biyografi bulunamadı, İngilizce gösteriliyor.</p>':""}<h2 class="sec">Bilinen yapımlar</h2><div class="grid">${S.pl.map((r,i)=>card(r,i,"pm")).join("")||'<span class="meta">Yapım bulunamadı.</span>'}</div><h2 class="sec">Filmografi</h2><div>${S.pf.map((r,i)=>`<button class="fr" data-pf="${i}"><span class="meta">${r.year||"–"}</span><span><b>${esc(r.title)}</b> <span class="meta">· ${r.type=="tv"?"Dizi":"Film"}${r.ch?" · "+esc(r.ch):""}</span></span></button>`).join("")||'<span class="meta">Kayıt yok.</span>'}</div></div></div>`)
+$("#app").innerHTML=W(`<button data-back="1">← Geri</button><div class="pp" style="margin-top:18px"><div>${x.profile_path?`<img class="pimg" alt="${esc(x.name)}" src="${IMG}w342${x.profile_path}">`:'<div class="ph pimg">?</div>'}<dl class="kd" style="grid-template-columns:1fr;margin-top:14px">${trow("Bilinen alanı",x.known_for_department)}${trow("Doğum tarihi",dt(x.birthday))}${trow("Doğum yeri",x.place_of_birth)}${trow("Ölüm tarihi",dt(x.deathday))}${trow(x.deathday?"Öldüğünde yaşı":"Yaşı",age!==""?String(age):"")}</dl></div><div><h1 class="h1t">${esc(x.name)}</h1><h2 class="sec" style="margin-top:0">Biyografi</h2><p class="bio" id="bio">${esc(x.biography||"Biyografi bulunamadı.")}</p>${(x.biography||"").length>420?'<button class="lk" data-bio="1">Tümünü oku</button>':""}${x.bioEn?'<p class="meta">Türkçe biyografi bulunamadı, İngilizce gösteriliyor.</p>':""}${S.pd.length?`<h2 class="sec">Yönetmen olarak</h2><div class="grid">${S.pd.map((r,i)=>card(r,i,"pd")).join("")}</div>`:""}<h2 class="sec">Bilinen yapımlar</h2><div class="grid">${S.pl.map((r,i)=>card(r,i,"pm")).join("")||'<span class="meta">Yapım bulunamadı.</span>'}</div><h2 class="sec">Filmografi</h2><div>${S.pf.map((r,i)=>`<button class="fr" data-pf="${i}"><span class="meta">${r.year||"–"}</span><span><b>${esc(r.title)}</b> <span class="meta">· ${r.type=="tv"?"Dizi":"Film"}${r.ch?" · "+esc(r.ch):""}</span></span></button>`).join("")||'<span class="meta">Kayıt yok.</span>'}</div></div></div>`)
 }).catch(()=>{$("#app").innerHTML=W('<div class="note">Oyuncu bilgisi alınamadı. <button data-back="1">← Geri</button></div>')})}
 function showDetail(t,id){S.view="detay";S.key="";nav();scrollTo(0,0);$("#app").innerHTML='<div class="sk"></div>';
 api(`/${t}/${id}`,{append_to_response:"videos,credits,similar,watch/providers,external_ids",include_video_language:"tr,en,null"}).then(x=>{
@@ -288,7 +291,7 @@ const seasons=tv?(x.seasons||[]).filter(z=>z.season_number>0).map(z=>`<span clas
 const tabs=[["genel","Genel Bakış"],["video","Fragman ve Videolar"],["oyuncu","Oyuncular"],["kunye","Künye"],["benzer","Benzer Yapımlar"]];
 $("#app").innerHTML=`<section class="dh" style="background-image:url(${x.backdrop_path?IMG+"w1280"+x.backdrop_path:""})"><div class="wrap dhin">${it.poster?`<img class="dp" alt="${esc(it.title)} afişi" src="${IMG}w342${it.poster}">`:""}<div class="di"><button class="bk" data-back="1">← Geri</button><div style="margin-top:12px;opacity:.85">${tv?"DİZİ":"FİLM"}</div><h1>${esc(it.title)}${it.year?` <span>(${it.year})</span>`:""}</h1>${x.tagline?`<p style="margin:4px 0"><i>${esc(x.tagline)}</i></p>`:""}<div class="chips"><span class="chip">★ ${it.rating.toFixed(1)}</span>${len?`<span class="chip">${esc(len)}</span>`:""}${S.gn.map(g=>`<span class="chip">${esc(g)}</span>`).join("")}</div>${vs.length?'<button class="on" data-tab="video">▶ Fragmanı izle</button>':""}</div></div></section>
 <div class="wrap" style="padding-top:8px"><div class="tabs">${tabs.map((z,i)=>`<button class="tb${i?"":" on"}" data-tab="${z[0]}">${z[1]}</button>`).join("")}</div>
-<div class="tp on" id="tp-genel"><div class="g2"><div><h2 class="sec" style="margin-top:0">Özet</h2><p>${esc(it.overview||"Türkçe özet bulunamadı.")}</p><h3>Nerede izlenir (Türkiye)</h3><p>${fl&&fl.length?esc(fl.join(", ")):"Abonelikli platform bilgisi yok."}${pr&&pr.link?` <a target="_blank" rel="noopener" href="${esc(pr.link)}">Tüm seçenekler</a>`:""}</p></div><div class="card2"><h3>Listem</h3><div id="ctl"></div></div></div></div>
+<div class="tp on" id="tp-genel"><div class="g2"><div><h2 class="sec" style="margin-top:0">Özet</h2><p>${esc(it.overview||"Türkçe özet bulunamadı.")}</p>${(()=>{const d=tv?(x.created_by||[]):[...new Map(((x.credits||{}).crew||[]).filter(c=>c.job=="Director").map(c=>[c.id,c])).values()];return d.length?`<p><b>${tv?"Yaratıcı":"Yönetmen"}:</b> ${d.map(z=>`<button class="lk" data-p="${z.id}">${esc(z.name)}</button>`).join(", ")}</p>`:""})()}<h3>Nerede izlenir (Türkiye)</h3><p>${fl&&fl.length?esc(fl.join(", ")):"Abonelikli platform bilgisi yok."}${pr&&pr.link?` <a target="_blank" rel="noopener" href="${esc(pr.link)}">Tüm seçenekler</a>`:""}</p></div><div class="card2"><h3>Listem</h3><div id="ctl"></div></div></div></div>
 <div class="tp" id="tp-video">${player(it,x,vs)}${vs.length?`<p class="meta" style="margin:10px 0">Video açılmazsa <a id="yl" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=${encodeURIComponent(vs[0].key)}">YouTube’da izle</a>.</p><div class="rail">${vs.slice(0,12).map(v=>`<button class="vt" data-vid="${esc(v.key)}"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/${encodeURIComponent(v.key)}/mqdefault.jpg"><span>${esc(v.type)}: ${esc(v.name)}</span></button>`).join("")}</div>`:""}</div>
 <div class="tp" id="tp-oyuncu">${cast.length?`<div class="cg">${cast.map(c=>`<button class="pc" data-p="${c.id}">${c.profile_path?`<img loading="lazy" alt="${esc(c.name)}" src="${IMG}w185${c.profile_path}">`:'<div class="ph">?</div>'}<b>${esc(c.name)}</b><span class="meta">${esc(c.character||"")}</span></button>`).join("")}</div>`:'<p class="meta">Kadro bilgisi yok.</p>'}</div>
 <div class="tp" id="tp-kunye"><dl class="kd">${tv?diziInfo(x):filmInfo(x)}</dl>${seasons?`<h3>Sezonlar</h3><div class="chips">${seasons}</div>`:""}</div>
@@ -309,6 +312,30 @@ const o={sort_by:"popularity.desc","vote_count.gte":300,"vote_average.gte":r.min
 if(r.mood)o.with_genres=MOODS[r.mood][r.type=="tv"?2:1];
 if(r.type=="movie"){if(r.len=="short")o["with_runtime.lte"]=100;if(r.len=="mid"){o["with_runtime.gte"]=100;o["with_runtime.lte"]=130}if(r.len=="long")o["with_runtime.gte"]=130}
 api("/discover/"+r.type,o).then(d=>{const a=d.results.filter(x=>x.poster_path&&x.overview);r.res=a.length?norm(a[Math.floor(Math.random()*a.length)],r.type):false;$("#res").innerHTML=resHtml()}).catch(()=>{$("#res").innerHTML='<div class="note">Öneri alınamadı, tekrar dene.</div>'})}
+/* takvim ve özet kartı */
+const days=d=>{const n=Math.round((new Date(d)-new Date(today()))/864e5);return n==0?" · bugün":n==1?" · yarın":n>1?" · "+n+" gün sonra":""};
+function drawCal(){$("#app").innerHTML=W('<h1 class="h1t">Yayın takvimi</h1><div class="sk" style="height:200px"></div>');
+const tvs=vals().filter(x=>x.type=="tv"&&x.status!="İzlendi");
+Promise.all([Promise.all(tvs.map(x=>api("/tv/"+x.id).catch(()=>null))),api("/movie/upcoming",{region:REGION}).catch(()=>null)]).then(r=>{
+if(S.view!="takvim")return;
+const sh=r[0].filter(Boolean).map(x=>({it:norm(x,"tv"),nx:x.next_episode_to_air,last:x.last_episode_to_air,st:x.status})),
+nx=sh.filter(z=>z.nx).sort((a,b)=>a.nx.air_date.localeCompare(b.nx.air_date)),none=sh.filter(z=>!z.nx),
+up=r[1]?r[1].results.filter(x=>x.release_date>=today()).sort((a,b)=>a.release_date.localeCompare(b.release_date)).map(x=>norm(x,"movie")):[];
+S.cal=[nx.map(z=>z.it),up,none.map(z=>z.it)];
+const row=(it,i,k,d,sub)=>`<button class="fr cl" data-cal="${k}-${i}"><span class="meta">${d}</span><span><b>${esc(it.title)}</b> <span class="meta">· ${sub}</span></span></button>`;
+$("#app").innerHTML=W(`<h1 class="h1t">Yayın takvimi</h1><h2 class="sec" style="margin-top:0">Takip ettiğin dizilerin yeni bölümleri</h2>${nx.map((z,i)=>row(z.it,i,0,dt(z.nx.air_date),"Sezon "+z.nx.season_number+" · Bölüm "+z.nx.episode_number+days(z.nx.air_date))).join("")||'<p class="meta">Yaklaşan bölüm yok. Bir diziyi “İzlenecek” ya da “İzleniyor” olarak işaretlersen yeni bölümleri burada görürsün.</p>'}${none.length?`<h2 class="sec">Yeni bölüm tarihi belli olmayanlar</h2>${none.map((z,i)=>row(z.it,i,2,z.last?dt(z.last.air_date):"–",z.st=="Ended"?"Sona erdi":"Tarih açıklanmadı")).join("")}`:""}<h2 class="sec">Yaklaşan filmler</h2>${up.map((x,i)=>row(x,i,1,dt(x.release_date),"Film"+days(x.release_date))).join("")||'<p class="meta">Yaklaşan film bulunamadı.</p>'}`)}).catch(fail)}
+async function shareCard(){const a=vals(),w=a.filter(x=>x.status=="İzlendi"),yr=String(new Date().getFullYear()),wy=w.filter(x=>(x.date||"").slice(0,4)==yr),r=w.filter(x=>x.my),avg=r.length?(r.reduce((s,x)=>s+x.my,0)/r.length).toFixed(1):"–",gc={};
+a.forEach(x=>(x.genres||[]).forEach(g=>gc[g]=(gc[g]||0)+1));const top=Object.keys(gc).sort((x,y)=>gc[y]-gc[x]).slice(0,3);
+const c=document.createElement("canvas");c.width=1080;c.height=1350;const g=c.getContext("2d"),F="system-ui,sans-serif";
+g.fillStyle="#0b0b0e";g.fillRect(0,0,1080,1350);g.fillStyle="#e5383b";g.fillRect(0,0,1080,14);
+g.font="800 40px "+F;g.fillText("SİNEMO",70,120);g.fillStyle="#f4f4f5";g.font="800 110px "+F;g.fillText(yr+" özetim",70,270);
+const stat=(n,l,x)=>{g.fillStyle="#f4f4f5";g.font="800 110px "+F;g.fillText(String(n),x,450);g.fillStyle="#a1a1aa";g.font="500 34px "+F;g.fillText(l,x,500)};
+stat(wy.filter(x=>x.type=="movie").length,"film izledim",70);stat(wy.filter(x=>x.type=="tv").length,"dizi izledim",420);stat(avg,"ortalama puanım",770);
+g.fillStyle="#a1a1aa";g.font="500 34px "+F;if(top.length)g.fillText("En çok: "+top.join(", "),70,590);
+const ps=(wy.length?wy:w).filter(x=>x.poster).slice(-4).reverse();
+await Promise.all(ps.map((x,i)=>new Promise(res=>{const im=new Image();im.crossOrigin="anonymous";im.onload=()=>{g.drawImage(im,70+i*250,660,230,345);res()};im.onerror=res;im.src=IMG+"w342"+x.poster})));
+g.fillStyle="#a1a1aa";g.font="500 30px "+F;g.fillText("Sinemo · film ve dizi günlüğüm",70,1280);
+c.toBlob(async b=>{const f=new File([b],"sinemo-ozet.png",{type:"image/png"});if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:"Sinemo özetim"});return}catch(e){}}const u=URL.createObjectURL(b),l=document.createElement("a");l.href=u;l.download="sinemo-ozet.png";l.click();setTimeout(()=>URL.revokeObjectURL(u),2000)})}
 /* yönlendirme */
 function go(v){S.key=v;S.view=VW[v];document.title=TITLE;
 if(v=="filmler"||v=="diziler"){const t=v=="diziler"?"tv":"movie";if(S.type!=t||!S.items.length||S.q){S.type=t;S.genre="";S.q="";S.f={from:"",to:"",min:"",sort:"",prov:""};$("#q").value="";busy=false;load(true)}else draw()}else draw();
@@ -328,6 +355,9 @@ else if(D.more){S.page++;load()}
 else if(D.i!==undefined)openIt(S.items[+D.i]);
 else if(D.l!==undefined)openIt(L[D.l]);
 else if(D.m!==undefined)openIt(S.sim[+D.m]);
+else if(D.cal){const q=D.cal.split("-");openIt(S.cal[q[0]][q[1]])}
+else if(D.card)shareCard();
+else if(D.pd!==undefined)openIt(S.pd[+D.pd]);
 else if(D.on){const k=D.on.split(":")[0],v=D.on.split(":")[1];if(k=="reset"){RN.mood=RN.len=RN.min="";RN.res=null}else if(k=="type"){RN.type=v;RN.len=""}else RN[k]=RN[k]==v?"":v;drawOner()}
 else if(D.pick)pick();
 else if(D.orn){if(D.orn=="go")openIt(RN.res);else{S.cur=RN.res;S.gn=[];ent();save();t.textContent="Eklendi"}}
