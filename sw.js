@@ -1,4 +1,4 @@
-const V="sinemo-v1",IMGC="sinemo-img-v1",SHELL=["./","index.html","manifest.json","icon-192.png","icon-512.png"];
+const V="sinemo-v2",IMGC="sinemo-img-v1",SHELL=["./","index.html","manifest.json","icon-192.png","icon-512.png"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!=V&&x!=IMGC).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 const trim=async(n,m)=>{const c=await caches.open(n),k=await c.keys();if(k.length>m)await Promise.all(k.slice(0,k.length-m).map(x=>c.delete(x)))};
